@@ -284,10 +284,19 @@ def upload_file():
 
     for file in image_files:
         filename = secure_filename(file.filename)
-        file.save(os.path.join(app.config['UPLOAD_FOLDER'], user_id, user_id, filename))
+        file_path = os.path.join(app.config['UPLOAD_FOLDER'], user_id, user_id, filename)
+        try:
+            os.makedirs(file_path,exist_ok=True)
+            print("File already exists")
+            track_user[user_id] = {"upload_image":"successfull"}
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], user_id, user_id, filename))
+
+        except Exception as e:
+            print(e)
+            track_user[user_id] = {"upload_image":"unsuccessfull"}
+            return 'Files not uploaded successfully'
     
     # Add user_id to track_user such that the "upload_image":"successfull" is added to the user_id
-    track_user[user_id] = {"upload_image":"successfull"}
     # put all the values 'null' in the track_user[user_id] except the "upload_image":"successfull"
     track_user[user_id]["train_model"] = None
     track_user[user_id]["save_model"] = None
