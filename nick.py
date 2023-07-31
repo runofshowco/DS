@@ -208,6 +208,54 @@ def save_model():
         return "Model saved successfully"
     
 
+def generated_image(user_id):
+    # generate images using the trained model .ckpt file which is saved in the stable_diffusion_weights folder
+    # and save the generated images in the person folder
+    prompt = f"photo of {user_id} person"
+    negative_prompt = "blurry photo"
+    guidance_scale = 7.5
+
+    pipe = StableDiffusionPipeline.from_pretrained(WEIGHTS_DIR, safety_checker=None, torch_dtype=torch.float16).to("cuda")
+    pipe.scheduler = DDIMScheduler.from_config(pipe.scheduler.config)
+    pipe.enable_xformers_memory_efficient_attention()
+    g_cuda = torch.Generator(device='cuda')
+    seed = 5345
+    g_cuda.manual_seed(seed)
+
+    prompt = prompt
+    negative_prompt = negative_prompt
+    num_samples = 4
+    guidance_scale = guidance_scale
+    num_inference_steps = 50
+    height = 512
+    width = 768
+
+    with autocast("cuda"), torch.inference_mode():
+        images = pipe(
+        prompt,
+        height=height,
+        width=width,
+        negative_prompt=negative_prompt,
+        num_images_per_prompt=num_samples,
+        num_inference_steps=num_inference_steps,
+        guidance_scale=guidance_scale,
+        generator=g_cuda
+    ).images
+
+    #save_image(images[0], 'image.png')
+
+    # Convert the image to bytes
+    img_byte_arr = io.BytesIO()
+    images[0].save(img_byte_arr, format='PNG')
+    img_byte_arr = img_byte_arr.getvalue()
+
+    # now save the images into the user_id/person folder
+    # save the images in the person folder
+
+    
+
+    
+
 @app.route('/upload', methods=['POST','GET'])
 def upload_file():
     global UPLOAD_FOLDER
@@ -222,23 +270,7 @@ def upload_file():
    
     user_id = str(uuid.uuid4())
 
-    
-
-
     image_files = request.files.getlist('images')
-    existing_files = os.listdir(app.config['UPLOAD_FOLDER'])
-    for filename in existing_files:
-        file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-        os.remove(file_path)
-
-    for file in image_files:
-        filename = secure_filename(file.filename)
-        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-    
-    # Add user_id to track_user such that the "upload_image":"successfull" is added to the user_id
-    track_user[user_id] = {"upload_image":"successfull"}
-    # then add for same user_id "train_model":"successfull" apppend the data 
-    #track_user[user_id]["train_model"] = "successfull"
 
     # Make a folder in the data folder with the user_id with all the permission to read write and execute
     os.mkdir(os.path.join(app.config['UPLOAD_FOLDER'], user_id))
@@ -248,6 +280,22 @@ def upload_file():
     os.mkdir(os.path.join(app.config['UPLOAD_FOLDER'], user_id, "stable_diffusion_weights", user_id))
     os.mkdir(os.path.join(app.config['UPLOAD_FOLDER'], user_id, "stable_diffusion_weights", user_id, "1000"))
 
+    # save the images in the user_id/user_id folder
+
+    for file in image_files:
+        filename = secure_filename(file.filename)
+        file.save(os.path.join(app.config['UPLOAD_FOLDER'], user_id, user_id, filename))
+    
+    # Add user_id to track_user such that the "upload_image":"successfull" is added to the user_id
+    track_user[user_id] = {"upload_image":"successfull"}
+    # put all the values 'null' in the track_user[user_id] except the "upload_image":"successfull"
+    track_user[user_id]["train_model"] = None
+    track_user[user_id]["save_model"] = None
+    track_user[user_id]["generate_image"] = None
+    # then add for same user_id "train_model":"successfull" apppend the data 
+    #track_user[user_id]["train_model"] = "successfull"
+
+   
 
     # this is my folder structure
     # data
