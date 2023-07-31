@@ -336,5 +336,5 @@ def generate_image():
 #----------generated images finished -------#
 
 if __name__ == '__main__':
-    app.run(port=5110,debug=True)
+    app.run(port=5120,debug=True)
 
