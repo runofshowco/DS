@@ -17,7 +17,7 @@ import subprocess
 import shutil
 from threading import Thread
 # Folder to store uploaded images
-UPLOAD_FOLDER = 'data'
+UPLOAD_FOLDER = 'data/'
 MODEL_NAME = "runwayml/stable-diffusion-v1-5"
 OUTPUT_DIR = "stable_diffusion_weights"
 WEIGHTS_DIR = "stable_diffusion_weights"
