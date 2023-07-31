@@ -272,6 +272,8 @@ def upload_file():
 
     image_files = request.files.getlist('images')
 
+    track_user[user_id] = {"upload_image": None, "train_model": None, "save_model": None, "generate_image": None}
+
     # Make a folder in the data folder with the user_id with all the permission to read write and execute
     os.mkdir(os.path.join(app.config['UPLOAD_FOLDER'], user_id))
     os.mkdir(os.path.join(app.config['UPLOAD_FOLDER'], user_id, user_id))
