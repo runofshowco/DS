@@ -7,6 +7,7 @@ from torch import autocast
 import torch
 import json
 import os
+import uuid
 from natsort import natsorted
 from glob import glob
 import shlex
@@ -16,11 +17,11 @@ import subprocess
 import shutil
 from threading import Thread
 # Folder to store uploaded images
-UPLOAD_FOLDER = 'data/X123'
+UPLOAD_FOLDER = 'data'
 MODEL_NAME = "runwayml/stable-diffusion-v1-5"
-OUTPUT_DIR = "stable_diffusion_weights/X123"
-WEIGHTS_DIR = "stable_diffusion_weights/X123/1000"
-
+OUTPUT_DIR = "stable_diffusion_weights"
+WEIGHTS_DIR = "stable_diffusion_weights"
+track_user = {}
 
 app = Flask(__name__)
 
@@ -214,6 +215,16 @@ def upload_file():
     with open('model_saving_status.txt', 'w') as file:
         pass
 
+    # make the user_id directory like this
+    # user_id = {"1":{"upload_image":"successfull","train_model":"successfull","save_model":"successfull","generate_image":"successfull"}
+    # "2":{"upload_image":"successfull","train_model":"successfull","save_model":"successfull","generate_image":"successfull"}
+
+   
+    user_id = str(uuid.uuid4())
+
+    
+
+
     image_files = request.files.getlist('images')
     existing_files = os.listdir(app.config['UPLOAD_FOLDER'])
     for filename in existing_files:
@@ -223,8 +234,33 @@ def upload_file():
     for file in image_files:
         filename = secure_filename(file.filename)
         file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+    
+    # Add user_id to track_user such that the "upload_image":"successfull" is added to the user_id
+    track_user[user_id] = {"upload_image":"successfull"}
+    # then add for same user_id "train_model":"successfull" apppend the data 
+    #track_user[user_id]["train_model"] = "successfull"
 
-    write_to_txt_file("model_saving_status.txt", "Files saved successfully")
+    # Make a folder in the data folder with the user_id with all the permission to read write and execute
+    os.mkdir(os.path.join(app.config['UPLOAD_FOLDER'], user_id))
+    os.mkdir(os.path.join(app.config['UPLOAD_FOLDER'], user_id, user_id))
+    os.mkdir(os.path.join(app.config['UPLOAD_FOLDER'], user_id, "person"))
+    os.mkdir(os.path.join(app.config['UPLOAD_FOLDER'], user_id, "stable_diffusion_weights"))
+    os.mkdir(os.path.join(app.config['UPLOAD_FOLDER'], user_id, "stable_diffusion_weights", user_id))
+    os.mkdir(os.path.join(app.config['UPLOAD_FOLDER'], user_id, "stable_diffusion_weights", user_id, "1000"))
+
+
+    # this is my folder structure
+    # data
+    #  - user_id
+    #     - user_id
+    #          - image1.jpg
+    #          - image2.jpg
+    #     - person(in this directroy all the trained images will be saved)
+    #     - stable_diffusion_weights
+    #          - user_id
+    #               - 1000
+    #                    - model.ckpt
+    #write_to_txt_file("model_saving_status.txt", "Files saved successfully")
     return 'Files uploaded successfully'
 
 
