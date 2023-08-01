@@ -1,6 +1,7 @@
 import os
 from nick import track_user,user_id_list
 import json
+import traceback
 
 from handle_json import get_data, update_data
 
@@ -64,6 +65,7 @@ def main():
 
     except Exception as e:
         print('--->', e)
+        traceback.print_exc()
         data['user_id_list'].append(user_id)
         data['track_user'][user_id]["status"] = "idle"
         update_data(data)
