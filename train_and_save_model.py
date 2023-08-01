@@ -1,6 +1,5 @@
-from nick import train_model, save_model , check_file_status,remove_status_text,write_to_txt_file
 import os
-from nick import track_user,generated_image_store_dir,user_id_list
+from nick import track_user,user_id_list
 
 # Get the absolute path of the directory the script is located in
 abs_dir_path = os.path.dirname(os.path.abspath('/workspace/nickfarrell'))
@@ -19,10 +18,18 @@ def main():
         return 
     user_id = user_id_list[0]
     user_id_list.pop(0)
+    if track_user[user_id]["train_model"] == "successfull" and track_user[user_id]["save_model"] == "successfull" and track_user[user_id]["generate_image"] == "successfull":
+       for i in range(len(user_id_list)):
+              if track_user[user_id_list[i]]["train_model"] == "successfull" and track_user[user_id_list[i]]["save_model"] == "successfull" and track_user[user_id_list[i]]["generate_image"] == "successfull":
+                user_id_list.pop(i)
     try:
+        if track_user[user_id]["train_model"] == "successfull" and track_user[user_id]["save_model"] == "successfull" and track_user[user_id]["generate_image"] == "successfull":
+            raise Exception("This user_id have been trained and saved and generated")
+        
+        from utility import train_model, save_model , generated_image_store_dir
         train_status = train_model(user_id)
-        save_status = save_model(user_id)
-        generate_status = generated_image_store_dir(user_id)
+        save_status = save_model(user_id,track_user)
+        generate_status = generated_image_store_dir(user_id,track_user)
         if ((train_status == "Model trained successfully") and (save_status=="Model saved successfully") and (generate_status=="Images generated successfully")):
             #remove_status_text('model_saving_status.txt', 'Files saved successfully')
             track_user[user_id]["train_model"] = "successfull"
