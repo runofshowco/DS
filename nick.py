@@ -141,6 +141,7 @@ def upload_file():
     track_user[user_id]["prompt"] = prompt
     track_user[user_id]["negetive_prompt"] = negetive_prompt
     track_user[user_id]["guidance_scale"] = guidance_scale
+    track_user[user_id]["status"] = "idle"
 
     # add the user_id into the list
     user_id_list.append(user_id)

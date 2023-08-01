@@ -13,30 +13,40 @@ def main():
     # check which user_id not not trained and saved and generated
     # pop the first element from the list and train and save and generate
     # first check if the user_id is null or not
+
+    for key,value in track_user.items():
+        if value["status"] == "pending":
+            print(f"User {key} is in pending state")
+            return 
+
+
     if len(user_id_list) == 0:
         print("All the user_id have been trained and saved and generated")
         return 
     user_id = user_id_list[0]
     user_id_list.pop(0)
     if track_user[user_id]["train_model"] == "successfull" and track_user[user_id]["save_model"] == "successfull" and track_user[user_id]["generate_image"] == "successfull":
-       for i in range(len(user_id_list)):
-              if track_user[user_id_list[i]]["train_model"] == "successfull" and track_user[user_id_list[i]]["save_model"] == "successfull" and track_user[user_id_list[i]]["generate_image"] == "successfull":
-                user_id_list.pop(i)
+        print("This user_id have been trained and saved and generated")
     try:
         if track_user[user_id]["train_model"] == "successfull" and track_user[user_id]["save_model"] == "successfull" and track_user[user_id]["generate_image"] == "successfull":
             raise Exception("This user_id have been trained and saved and generated")
         
         from utility import train_model, save_model , generated_image_store_dir
+        
         train_status = train_model(user_id)
         save_status = save_model(user_id,track_user)
         generate_status = generated_image_store_dir(user_id,track_user)
+        track_user[user_id]["status"] = "pending"
         if ((train_status == "Model trained successfully") and (save_status=="Model saved successfully") and (generate_status=="Images generated successfully")):
             #remove_status_text('model_saving_status.txt', 'Files saved successfully')
             track_user[user_id]["train_model"] = "successfull"
             track_user[user_id]["save_model"] = "successfull"
             track_user[user_id]["generate_image"] = "successfull"
+            track_user[user_id]["status"] = "idle"
+
     except Exception as e:
         print('--->', e)
+        track_user[user_id]["status"] = "idle"
         user_id_list.append(user_id)
 
 
