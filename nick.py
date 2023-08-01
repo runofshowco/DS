@@ -23,7 +23,7 @@ MODEL_NAME = "runwayml/stable-diffusion-v1-5"
 OUTPUT_DIR = "stable_diffusion_weights"
 WEIGHTS_DIR = "stable_diffusion_weights"
 track_user = {}
-user_id_list = []
+global user_id_list = []
 app = Flask(__name__)
 
 CORS(app) # Adds CORS to all routes
@@ -97,7 +97,7 @@ def train_model(user_id):
     with open(f"data/{user_id}/concepts_list.json", "w") as f:
         json.dump(concepts_list, f, indent=4)
 
-    output_dir = f"data/{user_id}/stable_diffusion_weights/{user_id}/1000"
+    output_dir = f"data/{user_id}/stable_diffusion_weights/{user_id}"
     
     cmd = f'''python3 train_dreambooth.py \
     --pretrained_model_name_or_path={MODEL_NAME} \
