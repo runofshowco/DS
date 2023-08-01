@@ -168,7 +168,7 @@ def upload_file():
     #               - 1000
     #                    - model.ckpt
     #write_to_txt_file("model_saving_status.txt", "Files saved successfully")
-    return f'Files uploaded successfully. Your user_id is {user_id}'
+    return f'Files uploaded successfully. Your user_id is {user_id} {track_user} {user_id_list}'
 
 
 #----------train_dreambooth.py---------#
