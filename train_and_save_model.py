@@ -29,7 +29,10 @@ def main():
     # check if if any user_id is in the model_status.json file
     # Assuming model_status.json is a file path
     
-    
+    # check if the user_id_list is empty or not
+    if len(data['user_id_list']) == 0:
+        print("User id list is empty")
+        return
 
 
     
