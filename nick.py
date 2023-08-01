@@ -79,7 +79,7 @@ def write_to_txt_file(file_path, text):
         f.write("\n" + text)
 
 def train_model(user_id):
-    global MODEL_NAME,OUTPUT_DIR,WEIGHTS_DIR
+    global MODEL_NAME,OUTPUT_DIR,WEIGHTS_DIR,track_user
 
     #Remove existing files
     #remove_files_in_directory(app.config['OUTPUT_DIR'])
@@ -156,7 +156,7 @@ def train_model(user_id):
 
 
 def save_model(user_id):
-    global MODEL_NAME,OUTPUT_DIR,WEIGHTS_DIR
+    global MODEL_NAME,OUTPUT_DIR,WEIGHTS_DIR,track_user
 
     # Remove existing files
     #remove_files_in_directory(app.config['OUTPUT_DIR'])
@@ -210,6 +210,7 @@ def save_model(user_id):
     
 
 def generated_image_store_dir(user_id):
+    global track_user
     # generate images using the trained model .ckpt file which is saved in the stable_diffusion_weights folder
     # and save the generated images in the person folder
     prompt = track_user[user_id]["prompt"]
