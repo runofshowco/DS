@@ -1,0 +1,19 @@
+{
+    "user_id_list": [
+        "3da8f83d-0ad1-490d-904f-e604f30fcb43",
+        "58aa3c4b-17cc-4370-92ef-aef404ceb3b0",
+        "15de43d0-4a0c-43f4-a9c4-7872908d10c1"
+    ],
+    "track_user": {
+        "15de43d0-4a0c-43f4-a9c4-7872908d10c1": {
+            "upload_image": "successful",
+            "train_model": null,
+            "save_model": null,
+            "generate_image": null,
+            "prompt": "photo of this person in mars",
+            "negetive_prompt": "blur,nudity",
+            "guidance_scale": 8.0,
+            "status": "idle"
+        }
+    }
+}
