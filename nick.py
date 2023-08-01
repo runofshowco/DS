@@ -23,7 +23,7 @@ MODEL_NAME = "runwayml/stable-diffusion-v1-5"
 OUTPUT_DIR = "stable_diffusion_weights"
 WEIGHTS_DIR = "stable_diffusion_weights"
 track_user = {}
-global user_id_list = []
+user_id_list = []
 app = Flask(__name__)
 
 CORS(app) # Adds CORS to all routes
