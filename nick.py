@@ -305,7 +305,7 @@ def upload_file():
     os.mkdir(os.path.join(app.config['UPLOAD_FOLDER'], user_id, "output"))
 
     # save the images in the user_id/user_id folder
-    upload_folder = f"data/{user_id}/{user_id}"
+    upload_folder = f"data/{user_id}/{user_id}/"
 
 
     for file in image_files:
