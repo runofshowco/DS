@@ -96,11 +96,13 @@ def train_model(user_id):
 
     with open(f"data/{user_id}/concepts_list.json", "w") as f:
         json.dump(concepts_list, f, indent=4)
+
+    output_dir = f"data/{user_id}/stable_diffusion_weights/{user_id}/1000"
     
     cmd = f'''python3 train_dreambooth.py \
     --pretrained_model_name_or_path={MODEL_NAME} \
     --pretrained_vae_name_or_path="stabilityai/sd-vae-ft-mse" \
-    --output_dir="{OUTPUT_DIR}/{user_id}" \
+    --output_dir="{output_dir}" \
     --revision="fp16" \
     --with_prior_preservation --prior_loss_weight=1.0 \
     --seed=1337 \
