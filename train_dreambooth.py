@@ -299,23 +299,23 @@ class DreamBoothDataset(Dataset):
 
         self.instance_images_path = []
         self.class_images_path = []
-        allowed_extensions = {".jpg", ".jpeg", ".png", ".gif"}
-        for concept in concepts_list:
-            inst_img_path = [
-            (x, concept["instance_prompt"])
-            for x in Path(concept["instance_data_dir"]).iterdir()
-            if x.is_file() and not str(x).endswith(".txt") and x.suffix in allowed_extensions
-            ]
-            self.instance_images_path.extend(inst_img_path)
-
-
+        # allowed_extensions = {".jpg", ".jpeg", ".png", ".gif"}
         # for concept in concepts_list:
         #     inst_img_path = [
-        #         (x, concept["instance_prompt"])
-        #         for x in Path(concept["instance_data_dir"]).iterdir()
-        #         if x.is_file() and not str(x).endswith(".txt")
+        #     (x, concept["instance_prompt"])
+        #     for x in Path(concept["instance_data_dir"]).iterdir()
+        #     if x.is_file() and not str(x).endswith(".txt") and x.suffix in allowed_extensions
         #     ]
         #     self.instance_images_path.extend(inst_img_path)
+
+
+        for concept in concepts_list:
+            inst_img_path = [
+                (x, concept["instance_prompt"])
+                for x in Path(concept["instance_data_dir"]).iterdir()
+                if x.is_file() and not str(x).endswith(".txt")
+            ]
+            self.instance_images_path.extend(inst_img_path)
 
             if with_prior_preservation:
                 class_img_path = [(x, concept["class_prompt"]) for x in Path(concept["class_data_dir"]).iterdir() if x.is_file()]
