@@ -305,19 +305,22 @@ def upload_file():
     os.mkdir(os.path.join(app.config['UPLOAD_FOLDER'], user_id, "output"))
 
     # save the images in the user_id/user_id folder
+    upload_folder = f"data/{user_id}/{user_id}"
 
-    for file in image_files:
-        filename = secure_filename(file.filename)
-        file_path = os.path.join(app.config['UPLOAD_FOLDER'], user_id, user_id, filename)
-        try:
-            file.save(file_path)
-            print(f"File {filename} saved successfully")
-            track_user[user_id] = {"upload_image":"successfull"}
 
-        except Exception as e:
-            print(e)
-            track_user[user_id] = {"upload_image":"unsuccessfull"}
-            return 'Files not uploaded successfully'
+    try:
+        for file in image_files:
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(upload_folder, filename))
+        
+        print(f"File {filename} saved successfully")
+        track_user[user_id] = {"upload_image":"successfull"}
+        
+
+    except Exception as e:
+        print(e)
+        track_user[user_id] = {"upload_image":"unsuccessfull"}
+        return 'Files not uploaded successfully'
     
     # Add user_id to track_user such that the "upload_image":"successfull" is added to the user_id
     # put all the values 'null' in the track_user[user_id] except the "upload_image":"successfull"
