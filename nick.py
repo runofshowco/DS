@@ -308,19 +308,13 @@ def upload_file():
     upload_folder = f"data/{user_id}/{user_id}"
 
 
-    try:
-        for file in image_files:
-            filename = secure_filename(file.filename)
-            file.save(os.path.join(upload_folder, filename))
-        
-        print(f"File {filename} saved successfully")
-        track_user[user_id] = {"upload_image":"successfull"}
-        
+    for file in image_files:
+        filename = secure_filename(file.filename)
+        file.save(os.path.join(upload_folder, filename))
 
-    except Exception as e:
-        print(e)
-        track_user[user_id] = {"upload_image":"unsuccessfull"}
-        return 'Files not uploaded successfully'
+    
+    track_user[user_id] = {"upload_image":"successfull"}
+        
     
     # Add user_id to track_user such that the "upload_image":"successfull" is added to the user_id
     # put all the values 'null' in the track_user[user_id] except the "upload_image":"successfull"
