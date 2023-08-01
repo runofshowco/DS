@@ -13,6 +13,10 @@ def main():
     # loop through the track_user then find if the user_id have null value in the "train_model" and "save_model" and "generate_image"
     # check which user_id not not trained and saved and generated
     # pop the first element from the list and train and save and generate
+    # first check if the user_id is null or not
+    if len(user_id_list) == 0:
+        print("All the user_id have been trained and saved and generated")
+        return 
     user_id = user_id_list[0]
     user_id_list.pop(0)
     try:
