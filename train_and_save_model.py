@@ -39,7 +39,7 @@ def main():
     
     user_id = data['user_id_list'].pop(0)
 
-    print(data)
+    print(data['track_user'])
 
     if data['track_user'][user_id]["train_model"] == "successfull" and data['track_user'][user_id]["save_model"] == "successfull" and data['track_user'][user_id]["generate_image"] == "successfull":
         print("This user_id have been trained and saved and generated")
