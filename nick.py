@@ -352,14 +352,14 @@ def upload_file():
 @app.route('/generate_images', methods=['POST','GET'])
 def generate_image():
 
-    global MODEL_NAME,OUTPUT_DIR,WEIGHTS_DIR
+    global MODEL_NAME,OUTPUT_DIR,WEIGHTS_DIR,track_user
 
     # get the user_id from the track_user
     user_id = request.form["user_id"]
 
     # first check if the user_id is valid or not
     if user_id not in track_user.keys():
-        return "Invalid user_id"
+        return jsonify({"track_user":track_user}), 400
 
     if ((track_user[user_id]["train_model"] == "successfull") and (track_user[user_id]["save_model"] == "successfull") and (track_user[user_id]["generate_image"] == "successfull") and (track_user[user_id]["upload_image"] == "successfull")):
         try:
@@ -372,7 +372,7 @@ def generate_image():
 
         except Exception as e:
             print(e)
-            return "Images not generated! Please have a paitence"
+            return jsonify({"track_user":track_user}), 400
 
 
 
