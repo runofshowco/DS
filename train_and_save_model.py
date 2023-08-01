@@ -3,7 +3,7 @@ import os
 from nick import track_user,generated_image_store_dir
 
 # Get the absolute path of the directory the script is located in
-abs_dir_path = os.path.dirname(os.path.abspath('/workspace/nickfarrell/data'))
+abs_dir_path = os.path.dirname(os.path.abspath('/workspace/nickfarrell'))
 
 # Change the working directory to the directory the script is in
 os.chdir(abs_dir_path)

@@ -366,7 +366,7 @@ def generate_image():
     user_id = request.form["user_id"]
 
 
-    return jsonify({"track_user":track_user}), 200
+    #return jsonify({"track_user":track_user}), 200
 
     # first check if the user_id is valid or not
     if user_id not in track_user.keys():
