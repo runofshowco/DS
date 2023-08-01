@@ -18,13 +18,10 @@ def get_data():
         with open(json_path, "r") as f:
             data = json.load(f)
         
-        print(data)
         
         if data.get('user_id_list') is None:
             data['user_list'] = []
-        
-        if data.get('track_id') is None:
-            data['track_user'] = {}
+
         
         return data
     except Exception as e:
