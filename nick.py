@@ -140,7 +140,7 @@ def upload_file():
 
     data = get_data()
     
-    data["user_id"].append(user_id)
+    data["user_id_list"].append(user_id)
 
     data['track_user'][user_id] = {"upload_image":"successful","train_model":None,"save_model":None,"generate_image":None,"prompt":prompt,"negetive_prompt":negetive_prompt,"guidance_scale":guidance_scale,"status":"idle"}    
 
