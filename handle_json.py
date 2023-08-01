@@ -2,7 +2,7 @@ import json
 
 
 def update_data(data):
-    with open("model_status.json", "r") as f:
+    with open("model_status.json", "w") as f:
         json.dump(data, f, indent=4)
 
 def get_data():
