@@ -2,6 +2,8 @@ import os
 from nick import track_user,user_id_list
 import json
 
+from handle_json import get_data, update_data
+
 # Get the absolute path of the directory the script is located in
 abs_dir_path = os.path.dirname(os.path.abspath('/workspace/nickfarrell'))
 
@@ -15,9 +17,10 @@ def main():
     # pop the first element from the list and train and save and generate
     # first check if the user_id is null or not
 
+    data = get_data()
     
 
-    for key,value in track_user.items():
+    for key,value in data['track_user'].items():
         if value["status"] == "pending":
             print(f"User {key} is in pending state")
             return 
@@ -25,26 +28,19 @@ def main():
 
     # check if if any user_id is in the model_status.json file
     # Assuming model_status.json is a file path
-    with open('model_status.json') as f:
-        model_status = json.load(f)
     
-    if not model_status:  # This is equivalent to checking if a dictionary is empty
-        print("No user_id in the model_status.json file")
-        return
     
 
 
     
     
-    # extract the first user_id from the json file
-    if isinstance(model_status["user_id"], list):
-        user_id = model_status["user_id"][0]
-        model_status["user_id"].pop(0)
+    user_id = data['user_id_list'].pop(0)
 
-    if track_user[user_id]["train_model"] == "successfull" and track_user[user_id]["save_model"] == "successfull" and track_user[user_id]["generate_image"] == "successfull":
+
+    if data['track_user'][user_id]["train_model"] == "successfull" and data['track_user'][user_id]["save_model"] == "successfull" and data['track_user'][user_id]["generate_image"] == "successfull":
         print("This user_id have been trained and saved and generated")
     try:
-        if track_user[user_id]["train_model"] == "successfull" and track_user[user_id]["save_model"] == "successfull" and track_user[user_id]["generate_image"] == "successfull":
+        if data['track_user'][user_id]["train_model"] == "successfull" and data['track_user'][user_id]["save_model"] == "successfull" and data['track_user'][user_id]["generate_image"] == "successfull":
             raise Exception("This user_id have been trained and saved and generated")
         
         from utility import train_model, save_model , generated_image_store_dir
@@ -52,24 +48,22 @@ def main():
         train_status = train_model(user_id)
         save_status = save_model(user_id,track_user)
         generate_status = generated_image_store_dir(user_id,track_user)
-        track_user[user_id]["status"] = "pending"
+        data['track_user'][user_id]["status"] = "pending"
         if ((train_status == "Model trained successfully") and (save_status=="Model saved successfully") and (generate_status=="Images generated successfully")):
             #remove_status_text('model_saving_status.txt', 'Files saved successfully')
-            track_user[user_id]["train_model"] = "successfull"
-            track_user[user_id]["save_model"] = "successfull"
-            track_user[user_id]["generate_image"] = "successfull"
-            track_user[user_id]["status"] = "idle"
-            with open("model_status.json", "w") as f:
-                json.dump(model_status, f, indent=4)
+            data['track_user'][user_id]["train_model"] = "successfull"
+            data['track_user'][user_id]["save_model"] = "successfull"
+            data['track_user'][user_id]["generate_image"] = "successfull"
+            data['track_user'][user_id]["status"] = "idle"
+        
+        update_data(data)
 
     except Exception as e:
         print('--->', e)
-        track_user[user_id]["status"] = "idle"
-        with open("model_status.json", "r") as f:
-            data = json.load(f)
-            data["user_id"].append(user_id)
-        with open("model_status.json", "w") as f:
-            json.dump(data, f, indent=4)
+        data['user_id_list'].append(user_id)
+        data['track_user'][user_id]["status"] = "idle"
+        update_data(data)
+        
 
 
 

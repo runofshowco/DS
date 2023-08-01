@@ -17,6 +17,7 @@ import io
 import subprocess
 import shutil
 from threading import Thread
+from handle_json import get_data, update_data
 # Folder to store uploaded images
 UPLOAD_FOLDER = 'data/'
 MODEL_NAME = "runwayml/stable-diffusion-v1-5"
@@ -25,6 +26,8 @@ WEIGHTS_DIR = "stable_diffusion_weights"
 track_user = {}
 user_id_list = []
 app = Flask(__name__)
+
+
 
 CORS(app) # Adds CORS to all routes
 
@@ -134,17 +137,17 @@ def upload_file():
 
 
     # append the user_id in the model_status.json file
-    with open("model_status.json", "r") as f:
-        data = json.load(f)
-        data["user_id"].append(user_id)
 
-        data['track_user'][user_id] = {"upload_image":"successful","train_model":None,"save_model":None,"generate_image":None,"prompt":prompt,"negetive_prompt":negetive_prompt,"guidance_scale":guidance_scale,"status":"idle"}    
+    data = get_data()
     
+    data["user_id"].append(user_id)
+
+    data['track_user'][user_id] = {"upload_image":"successful","train_model":None,"save_model":None,"generate_image":None,"prompt":prompt,"negetive_prompt":negetive_prompt,"guidance_scale":guidance_scale,"status":"idle"}    
+
 
 
     # dump the data in the model_status.json file
-    with open("model_status.json", "w") as f:
-        json.dump(data, f, indent=4)
+    update_data(data)
 
 
 
