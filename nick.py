@@ -89,7 +89,7 @@ def train_model(user_id):
     {
         "instance_prompt":      f"photo of {user_id} person",
         "class_prompt":         "photo of a person",
-        "instance_data_dir":    f"data/{user_id}",
+        "instance_data_dir":    f"data/{user_id}/{user_id}",
         "class_data_dir":       f"data/{user_id}/person"
     }
     ]
