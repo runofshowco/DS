@@ -359,31 +359,22 @@ def upload_file():
 #-------- generating images -----------#
 @app.route('/generate_images', methods=['POST','GET'])
 def generate_image():
-
     global MODEL_NAME,OUTPUT_DIR,WEIGHTS_DIR,track_user
-
-    # get the user_id from the track_user
     user_id = request.form["user_id"]
 
-
-    #return jsonify({"track_user":track_user}), 200
-
-    # first check if the user_id is valid or not
     if user_id not in track_user.keys():
         return jsonify({"track_user":track_user}), 400
 
     if ((track_user[user_id]["train_model"] == "successfull") and (track_user[user_id]["save_model"] == "successfull") and (track_user[user_id]["generate_image"] == "successfull") and (track_user[user_id]["upload_image"] == "successfull")):
         try:
-            # get the images from the folder and return the images
-            # images are stored on the data/{user_id}/output folder
-            # get the images from the folder and return the images
             for filename in natsorted(glob(f"data/{user_id}/output/*.png")):
                 print(filename)
                 return send_file(filename, mimetype='image/png')
-
         except Exception as e:
             print(e)
-            return jsonify({"track_user":track_user}), 400
+            return jsonify({"track_user":track_user}), 400  
+
+    return "No valid response", 404  # Add this line
 
 
 
