@@ -283,9 +283,11 @@ def upload_file():
     negetive_prompt = request.form["negetive_prompt"]
     guidance_scale = float(request.form["guidance_scale"])
 
-    track_user[user_id] = {"upload_image": None, "train_model": None, "save_model": None, "generate_image": None,"prompt":None,"negetive_prompt":None,"guidance_scale":None}
+    
 
     user_id = str(uuid.uuid4())
+
+    track_user[user_id] = {"upload_image": None, "train_model": None, "save_model": None, "generate_image": None,"prompt":None,"negetive_prompt":None,"guidance_scale":None}
 
     # save the prompt, negetive_prompt, guidance_scale in the track_user[user_id]
     track_user[user_id]["prompt"] = prompt
