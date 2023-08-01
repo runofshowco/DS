@@ -1,5 +1,6 @@
 import os
 from nick import track_user,user_id_list
+import json
 
 # Get the absolute path of the directory the script is located in
 abs_dir_path = os.path.dirname(os.path.abspath('/workspace/nickfarrell'))
@@ -14,17 +15,32 @@ def main():
     # pop the first element from the list and train and save and generate
     # first check if the user_id is null or not
 
+    
+
     for key,value in track_user.items():
         if value["status"] == "pending":
             print(f"User {key} is in pending state")
             return 
 
 
-    if len(user_id_list) == 0:
-        print("All the user_id have been trained and saved and generated")
-        return 
-    user_id = user_id_list[0]
-    user_id_list.pop(0)
+    # check if if any user_id is in the model_status.json file
+    # Assuming model_status.json is a file path
+    with open('model_status.json') as f:
+        model_status = json.load(f)
+    
+    if not model_status:  # This is equivalent to checking if a dictionary is empty
+        print("No user_id in the model_status.json file")
+        return
+    
+
+
+    
+    
+    # extract the first user_id from the json file
+    if isinstance(model_status["user_id"], list):
+        user_id = model_status["user_id"][0]
+        model_status["user_id"].pop(0)
+
     if track_user[user_id]["train_model"] == "successfull" and track_user[user_id]["save_model"] == "successfull" and track_user[user_id]["generate_image"] == "successfull":
         print("This user_id have been trained and saved and generated")
     try:
@@ -43,11 +59,17 @@ def main():
             track_user[user_id]["save_model"] = "successfull"
             track_user[user_id]["generate_image"] = "successfull"
             track_user[user_id]["status"] = "idle"
+            with open("model_status.json", "w") as f:
+                json.dump(model_status, f, indent=4)
 
     except Exception as e:
         print('--->', e)
         track_user[user_id]["status"] = "idle"
-        user_id_list.append(user_id)
+        with open("model_status.json", "r") as f:
+            data = json.load(f)
+            data["user_id"].append(user_id)
+        with open("model_status.json", "w") as f:
+            json.dump(data, f, indent=4)
 
 
 

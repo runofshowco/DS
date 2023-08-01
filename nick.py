@@ -77,14 +77,6 @@ def remove_files_in_directory(directory):
 def write_to_txt_file(file_path, text):
     with open(file_path, "a") as f:
         f.write("\n" + text)
-
-
-
-
-
-
-
-
     
 
 @app.route('/upload', methods=['POST','GET'])
@@ -134,17 +126,26 @@ def upload_file():
         file.save(os.path.join(upload_folder, filename))
 
     
-    track_user[user_id] = {"upload_image":"successfull"}
-    track_user[user_id]["train_model"] = None
-    track_user[user_id]["save_model"] = None
-    track_user[user_id]["generate_image"] = None
-    track_user[user_id]["prompt"] = prompt
-    track_user[user_id]["negetive_prompt"] = negetive_prompt
-    track_user[user_id]["guidance_scale"] = guidance_scale
-    track_user[user_id]["status"] = "idle"
+   
 
     # add the user_id into the list
-    user_id_list.append(user_id)
+    #user_id_list.append(user_id)
+
+
+
+    # append the user_id in the model_status.json file
+    with open("model_status.json", "r") as f:
+        data = json.load(f)
+        data["user_id"].append(user_id)
+
+        data['track_user'][user_id] = {"upload_image":"successful","train_model":None,"save_model":None,"generate_image":None,"prompt":prompt,"negetive_prompt":negetive_prompt,"guidance_scale":guidance_scale,"status":"idle"}    
+    
+
+
+    # dump the data in the model_status.json file
+    with open("model_status.json", "w") as f:
+        json.dump(data, f, indent=4)
+
 
 
         
