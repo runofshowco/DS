@@ -18,6 +18,7 @@ def get_data():
         
         return data
     except Exception as e:
+        print(e)
         return {"user_id_list": [], "track_user": {}}
 
     
