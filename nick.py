@@ -23,7 +23,7 @@ MODEL_NAME = "runwayml/stable-diffusion-v1-5"
 OUTPUT_DIR = "stable_diffusion_weights"
 WEIGHTS_DIR = "stable_diffusion_weights"
 track_user = {}
-
+user_id_list = []
 app = Flask(__name__)
 
 CORS(app) # Adds CORS to all routes
@@ -269,7 +269,7 @@ def generated_image_store_dir(user_id):
 
 @app.route('/upload', methods=['POST','GET'])
 def upload_file():
-    global UPLOAD_FOLDER
+    global UPLOAD_FOLDER,user_id_list
 
     # with open('model_saving_status.txt', 'w') as file:
     #     pass
@@ -321,6 +321,9 @@ def upload_file():
     track_user[user_id]["prompt"] = prompt
     track_user[user_id]["negetive_prompt"] = negetive_prompt
     track_user[user_id]["guidance_scale"] = guidance_scale
+
+    # add the user_id into the list
+    user_id_list.append(user_id)
 
 
         
