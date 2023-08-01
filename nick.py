@@ -288,12 +288,12 @@ def upload_file():
 
     user_id = str(uuid.uuid4())
 
-    track_user[user_id] = {"upload_image": None, "train_model": None, "save_model": None, "generate_image": None,"prompt":None,"negetive_prompt":None,"guidance_scale":None}
+    #track_user[user_id] = {"upload_image": None, "train_model": None, "save_model": None, "generate_image": None,"prompt":None,"negetive_prompt":None,"guidance_scale":None}
 
     # save the prompt, negetive_prompt, guidance_scale in the track_user[user_id]
-    track_user[user_id]["prompt"] = prompt
-    track_user[user_id]["negetive_prompt"] = negetive_prompt
-    track_user[user_id]["guidance_scale"] = guidance_scale
+    # track_user[user_id]["prompt"] = prompt
+    # track_user[user_id]["negetive_prompt"] = negetive_prompt
+    # track_user[user_id]["guidance_scale"] = guidance_scale
 
     # Make a folder in the data folder with the user_id with all the permission to read write and execute
     os.mkdir(os.path.join(app.config['UPLOAD_FOLDER'], user_id))
@@ -315,6 +315,14 @@ def upload_file():
 
     
     track_user[user_id] = {"upload_image":"successfull"}
+    track_user[user_id]["train_model"] = None
+    track_user[user_id]["save_model"] = None
+    track_user[user_id]["generate_image"] = None
+    track_user[user_id]["prompt"] = prompt
+    track_user[user_id]["negetive_prompt"] = negetive_prompt
+    track_user[user_id]["guidance_scale"] = guidance_scale
+
+
         
     
     # Add user_id to track_user such that the "upload_image":"successfull" is added to the user_id
