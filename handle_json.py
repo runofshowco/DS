@@ -10,10 +10,10 @@ def get_data():
         with open("model_status.json", "r") as f:
             data = json.load(f)
         
-        if !data.get('user_id_list']):
+        if data.get('user_id_list') is None:
             data['user_list'] = []
         
-        if !data.get('track_id'):
+        if data.get('track_id') is None:
             data['track_user'] = {}
         
         return data
