@@ -50,6 +50,10 @@ def main():
         update_data(data)
         from utility import train_model, save_model , generated_image_store_dir
         
+        train_status = None
+        save_status = None
+        generate_status = None
+        
         if data['track_user'][user_id]["train_model"] != "successfull":
             train_status = train_model(user_id)
             data['track_user'][user_id]["train_model"] = "successfull"
