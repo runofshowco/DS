@@ -53,7 +53,7 @@ def main():
         train_status = None
         save_status = None
         generate_status = None
-        
+
         if data['track_user'][user_id]["train_model"] != "successfull":
             train_status = train_model(user_id)
             data['track_user'][user_id]["train_model"] = "successfull"
@@ -69,15 +69,7 @@ def main():
             data['track_user'][user_id]["generate_image"] = "successfull"
             update_data(data)
         
-        
-        
-        
-        if ((train_status == "Model trained successfully") and (save_status=="Model saved successfully") and (generate_status=="Images generated successfully")):
-            #remove_status_text('model_saving_status.txt', 'Files saved successfully')
-           
-            
-            
-            data['track_user'][user_id]["status"] = "idle"
+        data['track_user'][user_id]["status"] = "idle"
         
         update_data(data)
 
