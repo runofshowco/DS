@@ -20,7 +20,7 @@ PROJECT_DIR = "/".join(str(__file__).split('/')[0:-1])
 UPLOAD_FOLDER = 'data/'
 MODEL_NAME = "runwayml/stable-diffusion-v1-5"
 OUTPUT_DIR = os.path.join(PROJECT_DIR,"stable_diffusion_weights")
-WEIGHTS_DIR = os.path.join(PROJECT_DIR,"stable_diffusion_weights")
+WEIGHTS_DIR ="stable_diffusion_weights"
 
 print(WEIGHTS_DIR)
 
@@ -164,11 +164,12 @@ def save_model(user_id,track_user):
 def generated_image_store_dir(user_id,track_user):
     # generate images using the trained model .ckpt file which is saved in the stable_diffusion_weights folder
     # and save the generated images in the person folder
+    ckpt_path = f"{PROJECT_DIR}/data/{user_id}/stable_diffusion_weights/{user_id}/1000" + "/model.ckpt"
     data = get_data()
     prompt = data['track_user'][user_id]["prompt"]
     negative_prompt = data['track_user'][user_id]["negetive_prompt"]
     guidance_scale = data['track_user'][user_id]["guidance_scale"]
-    pipe = StableDiffusionPipeline.from_pretrained(WEIGHTS_DIR, safety_checker=None, torch_dtype=torch.float16).to("cuda")
+    pipe = StableDiffusionPipeline.from_pretrained(ckpt_path, safety_checker=None, torch_dtype=torch.float16).to("cuda")
     pipe.scheduler = DDIMScheduler.from_config(pipe.scheduler.config)
     pipe.enable_xformers_memory_efficient_attention()
     g_cuda = torch.Generator(device='cuda')
