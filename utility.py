@@ -22,6 +22,8 @@ MODEL_NAME = "runwayml/stable-diffusion-v1-5"
 OUTPUT_DIR = os.path.join(PROJECT_DIR,"stable_diffusion_weights")
 WEIGHTS_DIR = os.path.join(PROJECT_DIR,"stable_diffusion_weights")
 
+print(WEIGHTS_DIR)
+
 from handle_json import get_data, update_data
 
 
@@ -166,7 +168,6 @@ def generated_image_store_dir(user_id,track_user):
     prompt = data['track_user'][user_id]["prompt"]
     negative_prompt = data['track_user'][user_id]["negetive_prompt"]
     guidance_scale = data['track_user'][user_id]["guidance_scale"]
-
     pipe = StableDiffusionPipeline.from_pretrained(WEIGHTS_DIR, safety_checker=None, torch_dtype=torch.float16).to("cuda")
     pipe.scheduler = DDIMScheduler.from_config(pipe.scheduler.config)
     pipe.enable_xformers_memory_efficient_attention()
