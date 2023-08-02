@@ -16,6 +16,7 @@ import subprocess
 import shutil
 from threading import Thread
 import path
+import string
 
 UPLOAD_FOLDER = 'data/'
 MODEL_NAME = "runwayml/stable-diffusion-v1-5"
