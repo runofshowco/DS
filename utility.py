@@ -36,6 +36,8 @@ def train_model(user_id):
     }
     ]
 
+    print(os.getcwd())
+    
     with open(f"model_status.json", "r") as f:
         tmp = json.load(f)
         print(tmp)
