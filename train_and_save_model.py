@@ -48,12 +48,14 @@ def main():
         if data['track_user'][user_id]["train_model"] == "successfull" and data['track_user'][user_id]["save_model"] == "successfull" and data['track_user'][user_id]["generate_image"] == "successfull":
             raise Exception("This user_id have been trained and saved and generated")
         
+        data['track_user'][user_id]["status"] = "pending"
+        update_data(data)
         from utility import train_model, save_model , generated_image_store_dir
         
         train_status = train_model(user_id)
         save_status = save_model(user_id,track_user)
         generate_status = generated_image_store_dir(user_id,track_user)
-        data['track_user'][user_id]["status"] = "pending"
+        
         if ((train_status == "Model trained successfully") and (save_status=="Model saved successfully") and (generate_status=="Images generated successfully")):
             #remove_status_text('model_saving_status.txt', 'Files saved successfully')
             data['track_user'][user_id]["train_model"] = "successfull"
