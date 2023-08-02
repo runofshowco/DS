@@ -164,7 +164,7 @@ def save_model(user_id,track_user):
 def generated_image_store_dir(user_id,track_user):
     # generate images using the trained model .ckpt file which is saved in the stable_diffusion_weights folder
     # and save the generated images in the person folder
-    ckpt_path = f"{PROJECT_DIR}/data/{user_id}/stable_diffusion_weights/{user_id}/1000" + "/model.ckpt"
+    ckpt_path = f"{PROJECT_DIR}/data/{user_id}/stable_diffusion_weights/{user_id}/1000"
     data = get_data()
     prompt = data['track_user'][user_id]["prompt"]
     negative_prompt = data['track_user'][user_id]["negetive_prompt"]
