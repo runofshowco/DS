@@ -160,9 +160,10 @@ def save_model(user_id,track_user):
 def generated_image_store_dir(user_id,track_user):
     # generate images using the trained model .ckpt file which is saved in the stable_diffusion_weights folder
     # and save the generated images in the person folder
-    prompt = track_user[user_id]["prompt"]
-    negative_prompt = track_user[user_id]["negetive_prompt"]
-    guidance_scale = track_user[user_id]["guidance_scale"]
+    data = get_data()
+    prompt = data['track_user'][user_id]["prompt"]
+    negative_prompt = data['track_user'][user_id]["negetive_prompt"]
+    guidance_scale = data['track_user'][user_id]["guidance_scale"]
 
     pipe = StableDiffusionPipeline.from_pretrained(WEIGHTS_DIR, safety_checker=None, torch_dtype=torch.float16).to("cuda")
     pipe.scheduler = DDIMScheduler.from_config(pipe.scheduler.config)
