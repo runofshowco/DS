@@ -15,7 +15,6 @@ import io
 import subprocess
 import shutil
 from threading import Thread
-import path
 
 UPLOAD_FOLDER = 'data/'
 MODEL_NAME = "runwayml/stable-diffusion-v1-5"
@@ -33,17 +32,17 @@ def train_model(user_id):
     {
         "instance_prompt":      f"photo of {user_id} person",
         "class_prompt":         "photo of a person",
-        "instance_data_dir":    path.join(PROJECT_DIR, 'data', user_id, user_id),
-        "class_data_dir":       path.join(PROJECT_DIR, 'data', user_id, "person")
+        "instance_data_dir":    os.path.join(PROJECT_DIR, 'data', user_id, user_id),
+        "class_data_dir":       os.path.join(PROJECT_DIR, 'data', user_id, "person")
     }
     ]
 
     
 
-    with open(path.join(PROJECT_DIR, "data", user_id, "concepts_list.json"), "w") as f:
+    with open(os.path.join(PROJECT_DIR, "data", user_id, "concepts_list.json"), "w") as f:
         json.dump(concepts_list, f, indent=4)
 
-    output_dir = path.join(PROJECT_DIR, "data", user_id, "stable_diffusion_weights", user_id)
+    output_dir = os.path.join(PROJECT_DIR, "data", user_id, "stable_diffusion_weights", user_id)
     
     cmd = f'''python3 train_dreambooth.py \
     --pretrained_model_name_or_path={MODEL_NAME} \
