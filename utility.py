@@ -44,7 +44,7 @@ def train_model(user_id):
 
     output_dir = os.path.join(PROJECT_DIR, "data", user_id, "stable_diffusion_weights", user_id)
     
-    cmd = f'''python3 train_dreambooth.py \
+    cmd = f'''python3 {PROJECT_DIR}/train_dreambooth.py \
     --pretrained_model_name_or_path={MODEL_NAME} \
     --pretrained_vae_name_or_path="stabilityai/sd-vae-ft-mse" \
     --output_dir="{output_dir}" \
@@ -110,14 +110,14 @@ def save_model(user_id,track_user):
 
 
 
-    ckpt_path = f"data/{user_id}/stable_diffusion_weights/{user_id}/1000" + "/model.ckpt"
+    ckpt_path = f"{PROJECT_DIR}/data/{user_id}/stable_diffusion_weights/{user_id}/1000" + "/model.ckpt"
 
     half_arg = ""
     fp16 = True
     if fp16:
         half_arg = "--half"
 
-    cmd = f'''python convert_diffusers_to_original_stable_diffusion.py \
+    cmd = f'''python {PROJECT_DIR}/convert_diffusers_to_original_stable_diffusion.py \
     --model_path="data/{user_id}/stable_diffusion_weights/{user_id}/1000" \
     --checkpoint_path={ckpt_path} {half_arg}
     '''
