@@ -36,6 +36,10 @@ def train_model(user_id):
     }
     ]
 
+    with open(f"data/{user_id}/concepts_list.json", "r") as f:
+        tmp = json.load(f)
+        print(tmp)
+
     with open(f"data/{user_id}/concepts_list.json", "w") as f:
         json.dump(concepts_list, f, indent=4)
 
