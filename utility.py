@@ -16,13 +16,12 @@ import subprocess
 import shutil
 from threading import Thread
 import path
-import string
 
 UPLOAD_FOLDER = 'data/'
 MODEL_NAME = "runwayml/stable-diffusion-v1-5"
 OUTPUT_DIR = "stable_diffusion_weights"
 WEIGHTS_DIR = "stable_diffusion_weights"
-PROJECT_DIR = "/".join(string(__file__).split('/')[0:-1])
+PROJECT_DIR = "/".join(str(__file__).split('/')[0:-1])
 
 def train_model(user_id):
 
