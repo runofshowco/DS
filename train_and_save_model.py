@@ -1,8 +1,6 @@
 import os
-from nick import track_user,user_id_list
 import json
 import traceback
-
 from handle_json import get_data, update_data
 
 # Get the absolute path of the directory the script is located in
