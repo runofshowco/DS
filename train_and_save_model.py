@@ -56,17 +56,17 @@ def main():
             update_data(data)
         
         if data['track_user'][user_id]["save_model"] != "successfull":
-            save_status = save_model(user_id,track_user)
+            save_status = save_model(user_id,data['track_user'])
             data['track_user'][user_id]["save_model"] = "successfull"
             update_data(data)
         
         if data['track_user'][user_id]["generate_image"] != "successfull":
-            train_status = train_model(user_id)
+            generate_status = generated_image_store_dir(user_id,data['track_user'])
             data['track_user'][user_id]["generate_image"] = "successfull"
             update_data(data)
         
         
-        generate_status = generated_image_store_dir(user_id,data['track_user'])
+        
         
         if ((train_status == "Model trained successfully") and (save_status=="Model saved successfully") and (generate_status=="Images generated successfully")):
             #remove_status_text('model_saving_status.txt', 'Files saved successfully')
