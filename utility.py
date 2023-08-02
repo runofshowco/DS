@@ -16,11 +16,12 @@ import subprocess
 import shutil
 from threading import Thread
 
+PROJECT_DIR = "/".join(str(__file__).split('/')[0:-1])
 UPLOAD_FOLDER = 'data/'
 MODEL_NAME = "runwayml/stable-diffusion-v1-5"
-OUTPUT_DIR = "stable_diffusion_weights"
-WEIGHTS_DIR = "stable_diffusion_weights"
-PROJECT_DIR = "/".join(str(__file__).split('/')[0:-1])
+OUTPUT_DIR = os.path.join(PROJECT_DIR,"stable_diffusion_weights")
+WEIGHTS_DIR = os.path.join(PROJECT_DIR,"stable_diffusion_weights")
+
 
 def train_model(user_id):
 
@@ -65,7 +66,7 @@ def train_model(user_id):
     --max_train_steps=1000 \
     --save_interval=1000 \
     --save_sample_prompt="photo of {user_id} person" \
-    --concepts_list="data/{user_id}/concepts_list.json"'''
+    --concepts_list="{os.path.join(PROJECT_DIR, "data", user_id, "concepts_list.json")}"'''
 
     # Training script here, for example:
     print("Training model...")
@@ -118,7 +119,7 @@ def save_model(user_id,track_user):
         half_arg = "--half"
 
     cmd = f'''python {PROJECT_DIR}/convert_diffusers_to_original_stable_diffusion.py \
-    --model_path="data/{user_id}/stable_diffusion_weights/{user_id}/1000" \
+    --model_path="{PROJECT_DIR}/data/{user_id}/stable_diffusion_weights/{user_id}/1000" \
     --checkpoint_path={ckpt_path} {half_arg}
     '''
 
