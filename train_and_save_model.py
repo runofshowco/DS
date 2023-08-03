@@ -69,7 +69,7 @@ def main():
             data['track_user'][user_id]["generate_image"] = "successfull"
             update_data(data)
         
-        data['track_user'][user_id]["status"] = "idle"
+        data['track_user'][user_id]["status"] = "completed"
         
         update_data(data)
 

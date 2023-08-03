@@ -172,7 +172,8 @@ def upload_file():
     #               - 1000
     #                    - model.ckpt
     #write_to_txt_file("model_saving_status.txt", "Files saved successfully")
-    return f'Files uploaded successfully. Your user_id is {user_id} {track_user} {user_id_list}'
+    return {"message": "Images uploaded successfully!", "track_id": user_id}
+    # return f'Files uploaded successfully. Your user_id is {user_id} {track_user} {user_id_list}'
 
 
 #----------train_dreambooth.py---------#
@@ -185,13 +186,15 @@ def upload_file():
 # -------------------- model saving finished ----------#
 
 #-------- generating images -----------#
-@app.route('/generate_images', methods=['POST','GET'])
+@app.route('/get_images', methods=['POST','GET'])
 def generate_image():
-    global MODEL_NAME,OUTPUT_DIR,WEIGHTS_DIR,track_user
-    user_id = request.form["user_id"]
+    global MODEL_NAME,OUTPUT_DIR,WEIGHTS_DIR
+    track_user = get_data()["track_user"]
+
+    user_id = request.form["track_id"]
 
     if user_id not in track_user.keys():
-        return jsonify({"track_user":track_user}), 400
+        return jsonify({"User Not Found!":}), 400
 
     if ((track_user[user_id]["train_model"] == "successfull") and (track_user[user_id]["save_model"] == "successfull") and (track_user[user_id]["generate_image"] == "successfull") and (track_user[user_id]["upload_image"] == "successfull")):
         try:
@@ -200,9 +203,10 @@ def generate_image():
                 return send_file(filename, mimetype='image/png')
         except Exception as e:
             print(e)
-            return jsonify({"track_user":track_user}), 400  
+            return jsonify({"message":"Something Wrong. Report to Admin with track_id!", "track_id": user_id})
+        
 
-    return "No valid response", 404  # Add this line
+    return jsonify({"message": "Image Being Processed"}), 200
 
 
 
