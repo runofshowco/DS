@@ -217,7 +217,7 @@ def generate_image():
         try:
             images = []
             for filename in natsorted(glob(f"data/{user_id}/output/*.png")):
-                iages.append(encode_image(filename))
+                images.append(encode_image(filename))
             return jsonify({"message":"Generation Successfull!", "images": images})
         except Exception as e:
             print(e)
