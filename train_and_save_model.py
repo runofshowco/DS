@@ -64,7 +64,7 @@ def main():
             data['track_user'][user_id]["save_model"] = "successfull"
             update_data(data)
         
-        if data['track_user'][user_id]["generate_image"] != "successfull":
+        if data['track_user'][user_id]["generate_image"] != "successfull" or True:
             generate_status = generated_image_store_dir(user_id,data['track_user'])
             data['track_user'][user_id]["generate_image"] = "successfull"
             update_data(data)
