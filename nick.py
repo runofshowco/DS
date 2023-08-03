@@ -18,6 +18,7 @@ import subprocess
 import shutil
 from threading import Thread
 from handle_json import get_data, update_data
+import traceback
 # Folder to store uploaded images
 UPLOAD_FOLDER = 'data/'
 MODEL_NAME = "runwayml/stable-diffusion-v1-5"
@@ -84,95 +85,102 @@ def write_to_txt_file(file_path, text):
 
 @app.route('/upload', methods=['POST','GET'])
 def upload_file():
-    global UPLOAD_FOLDER,user_id_list
 
-    # with open('model_saving_status.txt', 'w') as file:
-    #     pass
+    try:
 
-    # make the user_id directory like this
-    # user_id = {"1":{"upload_image":"successfull","train_model":"successfull","save_model":"successfull","generate_image":"successfull"}
-    # "2":{"upload_image":"successfull","train_model":"successfull","save_model":"successfull","generate_image":"successfull"}
-    
+        global UPLOAD_FOLDER,user_id_list
 
-    image_files = request.files.getlist('images')
-    prompt = request.form["prompt"]
-    negetive_prompt = request.form["negetive_prompt"]
-    guidance_scale = float(request.form["guidance_scale"])
+        # with open('model_saving_status.txt', 'w') as file:
+        #     pass
 
-    
+        # make the user_id directory like this
+        # user_id = {"1":{"upload_image":"successfull","train_model":"successfull","save_model":"successfull","generate_image":"successfull"}
+        # "2":{"upload_image":"successfull","train_model":"successfull","save_model":"successfull","generate_image":"successfull"}
+        
 
-    user_id = str(uuid.uuid4())
+        image_files = request.files.getlist('images')
+        prompt = request.form["prompt"]
+        negetive_prompt = request.form["negetive_prompt"]
+        guidance_scale = float(request.form["guidance_scale"])
 
-    #track_user[user_id] = {"upload_image": None, "train_model": None, "save_model": None, "generate_image": None,"prompt":None,"negetive_prompt":None,"guidance_scale":None}
+        
 
-    # save the prompt, negetive_prompt, guidance_scale in the track_user[user_id]
-    # track_user[user_id]["prompt"] = prompt
-    # track_user[user_id]["negetive_prompt"] = negetive_prompt
-    # track_user[user_id]["guidance_scale"] = guidance_scale
+        user_id = str(uuid.uuid4())
 
-    # Make a folder in the data folder with the user_id with all the permission to read write and execute
-    os.mkdir(os.path.join(app.config['UPLOAD_FOLDER'], user_id))
-    os.mkdir(os.path.join(app.config['UPLOAD_FOLDER'], user_id, user_id))
-    os.mkdir(os.path.join(app.config['UPLOAD_FOLDER'], user_id, "person"))
-    os.mkdir(os.path.join(app.config['UPLOAD_FOLDER'], user_id, "stable_diffusion_weights"))
-    os.mkdir(os.path.join(app.config['UPLOAD_FOLDER'], user_id, "stable_diffusion_weights", user_id))
-    os.mkdir(os.path.join(app.config['UPLOAD_FOLDER'], user_id, "stable_diffusion_weights", user_id, "1000"))
-    # make the output folder where the images will be stored
-    os.mkdir(os.path.join(app.config['UPLOAD_FOLDER'], user_id, "output"))
+        #track_user[user_id] = {"upload_image": None, "train_model": None, "save_model": None, "generate_image": None,"prompt":None,"negetive_prompt":None,"guidance_scale":None}
 
-    # save the images in the user_id/user_id folder
-    upload_folder = f"data/{user_id}/{user_id}/"
+        # save the prompt, negetive_prompt, guidance_scale in the track_user[user_id]
+        # track_user[user_id]["prompt"] = prompt
+        # track_user[user_id]["negetive_prompt"] = negetive_prompt
+        # track_user[user_id]["guidance_scale"] = guidance_scale
 
+        # Make a folder in the data folder with the user_id with all the permission to read write and execute
+        os.mkdir(os.path.join(app.config['UPLOAD_FOLDER'], user_id))
+        os.mkdir(os.path.join(app.config['UPLOAD_FOLDER'], user_id, user_id))
+        os.mkdir(os.path.join(app.config['UPLOAD_FOLDER'], user_id, "person"))
+        os.mkdir(os.path.join(app.config['UPLOAD_FOLDER'], user_id, "stable_diffusion_weights"))
+        os.mkdir(os.path.join(app.config['UPLOAD_FOLDER'], user_id, "stable_diffusion_weights", user_id))
+        os.mkdir(os.path.join(app.config['UPLOAD_FOLDER'], user_id, "stable_diffusion_weights", user_id, "1000"))
+        # make the output folder where the images will be stored
+        os.mkdir(os.path.join(app.config['UPLOAD_FOLDER'], user_id, "output"))
 
-    for file in image_files:
-        filename = secure_filename(file.filename)
-        file.save(os.path.join(upload_folder, filename))
-
-    
-   
-
-    # add the user_id into the list
-    #user_id_list.append(user_id)
+        # save the images in the user_id/user_id folder
+        upload_folder = f"data/{user_id}/{user_id}/"
 
 
-
-    # append the user_id in the model_status.json file
-
-    data = get_data()
-    
-    data["user_id_list"].append(user_id)
-
-    data['track_user'][user_id] = {"upload_image":"successful","train_model":None,"save_model":None,"generate_image":None,"prompt":prompt,"negetive_prompt":negetive_prompt,"guidance_scale":guidance_scale,"status":"idle"}    
-
-
-
-    # dump the data in the model_status.json file
-    update_data(data)
-
-
+        for file in image_files:
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(upload_folder, filename))
 
         
     
-    # Add user_id to track_user such that the "upload_image":"successfull" is added to the user_id
-    # put all the values 'null' in the track_user[user_id] except the "upload_image":"successfull"
-    # then add for same user_id "train_model":"successfull" apppend the data 
-    #track_user[user_id]["train_model"] = "successfull"
 
-   
+        # add the user_id into the list
+        #user_id_list.append(user_id)
 
-    # this is my folder structure
-    # data
-    #  - user_id
-    #     - user_id
-    #          - image1.jpg
-    #          - image2.jpg
-    #     - person(in this directroy all the trained images will be saved)
-    #     - stable_diffusion_weights
-    #          - user_id
-    #               - 1000
-    #                    - model.ckpt
-    #write_to_txt_file("model_saving_status.txt", "Files saved successfully")
-    return {"message": "Images uploaded successfully!", "track_id": user_id}
+
+
+        # append the user_id in the model_status.json file
+
+        data = get_data()
+        
+        data["user_id_list"].append(user_id)
+
+        data['track_user'][user_id] = {"upload_image":"successful","train_model":None,"save_model":None,"generate_image":None,"prompt":prompt,"negetive_prompt":negetive_prompt,"guidance_scale":guidance_scale,"status":"idle"}    
+
+
+
+        # dump the data in the model_status.json file
+        update_data(data)
+
+
+
+            
+        
+        # Add user_id to track_user such that the "upload_image":"successfull" is added to the user_id
+        # put all the values 'null' in the track_user[user_id] except the "upload_image":"successfull"
+        # then add for same user_id "train_model":"successfull" apppend the data 
+        #track_user[user_id]["train_model"] = "successfull"
+
+    
+
+        # this is my folder structure
+        # data
+        #  - user_id
+        #     - user_id
+        #          - image1.jpg
+        #          - image2.jpg
+        #     - person(in this directroy all the trained images will be saved)
+        #     - stable_diffusion_weights
+        #          - user_id
+        #               - 1000
+        #                    - model.ckpt
+        #write_to_txt_file("model_saving_status.txt", "Files saved successfully")
+        return {"message": "Images uploaded successfully!", "track_id": user_id}
+    except Exception as e:
+        traceback.print_exc()
+        print(e)
+        return {"message": e}
     # return f'Files uploaded successfully. Your user_id is {user_id} {track_user} {user_id_list}'
 
 
