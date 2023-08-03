@@ -194,7 +194,7 @@ def generate_image():
     user_id = request.form["track_id"]
 
     if user_id not in track_user.keys():
-        return jsonify({"User Not Found!":}), 400
+        return jsonify({"message": "Invalid Track ID!"}), 400
 
     if ((track_user[user_id]["train_model"] == "successfull") and (track_user[user_id]["save_model"] == "successfull") and (track_user[user_id]["generate_image"] == "successfull") and (track_user[user_id]["upload_image"] == "successfull")):
         try:
