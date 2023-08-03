@@ -70,7 +70,7 @@ def main():
             update_data(data)
         
         data['track_user'][user_id]["status"] = "completed"
-        
+        data['user_id_list'].append(user_id)
         update_data(data)
 
     except Exception as e:
