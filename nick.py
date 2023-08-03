@@ -20,7 +20,8 @@ from threading import Thread
 from handle_json import get_data, update_data
 import traceback
 # Folder to store uploaded images
-UPLOAD_FOLDER = 'data/'
+PROJECT_DIR = "/".join(str(__file__).split('/')[0:-1])
+UPLOAD_FOLDER = f'{PROJECT_DIR}/data/'
 MODEL_NAME = "runwayml/stable-diffusion-v1-5"
 OUTPUT_DIR = "stable_diffusion_weights"
 WEIGHTS_DIR = "stable_diffusion_weights"
