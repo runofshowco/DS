@@ -207,7 +207,9 @@ def generated_image_store_dir(user_id,track_user):
         for i , img in enumerate(images):
             # img_pil = Image.fromarray(img.permute(1,2,0).cpu().numpy())
             img_pil = Image.fromarray(img)
-            img_pil.save(f"{PROJECT_DIR}/data/{user_id}/output/{i}.png")
+
+            img_byte_arr = io.BytesIO()
+            img_pil.save(img_byte_arr, f"{PROJECT_DIR}/data/{user_id}/output/{i}.png")
         return "Images generated successfully"
     except Exception as e:
         print(e)
