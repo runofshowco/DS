@@ -195,6 +195,14 @@ def upload_file():
 # -------------------- model saving finished ----------#
 
 #-------- generating images -----------#
+
+def encode_image(image_path):
+    pil_img = Image.open(image_path, mode='r') # reads the PIL image
+    byte_arr = io.BytesIO()
+    pil_img.save(byte_arr, format='PNG') # convert the PIL image to byte array
+    encoded_img = encodebytes(byte_arr.getvalue()).decode('ascii') # encode as base64
+    return encoded_img
+
 @app.route('/get_images', methods=['POST','GET'])
 def generate_image():
     global MODEL_NAME,OUTPUT_DIR,WEIGHTS_DIR
@@ -207,9 +215,10 @@ def generate_image():
 
     if ((track_user[user_id]["train_model"] == "successfull") and (track_user[user_id]["save_model"] == "successfull") and (track_user[user_id]["generate_image"] == "successfull") and (track_user[user_id]["upload_image"] == "successful")):
         try:
+            images = []
             for filename in natsorted(glob(f"data/{user_id}/output/*.png")):
-                print(filename)
-                return send_file(filename, mimetype='image/png')
+                iages.append(encode_image(filename))
+            return jsonify({"message":"Generation Successfull!", "images": images})
         except Exception as e:
             print(e)
             return jsonify({"message":"Something Wrong. Report to Admin with track_id!", "track_id": user_id})
