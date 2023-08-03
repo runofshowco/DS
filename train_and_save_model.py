@@ -42,10 +42,8 @@ def main():
 
     if data['track_user'][user_id]["train_model"] == "successfull" and data['track_user'][user_id]["save_model"] == "successfull" and data['track_user'][user_id]["generate_image"] == "successfull":
         print("This user_id have been trained and saved and generated")
+        return
     try:
-        if data['track_user'][user_id]["train_model"] == "successfull" and data['track_user'][user_id]["save_model"] == "successfull" and data['track_user'][user_id]["generate_image"] == "successfull":
-            raise Exception("This user_id have been trained and saved and generated")
-        
         data['track_user'][user_id]["status"] = "pending"
         update_data(data)
         from utility import train_model, save_model , generated_image_store_dir
