@@ -2,7 +2,6 @@ import os
 import json
 import traceback
 from handle_json import get_data, update_data
-from utility import train_model, save_model , generated_image_store_dir
 
 # Get the absolute path of the directory the script is located in
 abs_dir_path = os.path.dirname(os.path.abspath('/workspace/nickfarrell'))
@@ -49,7 +48,7 @@ def main():
         
         data['track_user'][user_id]["status"] = "pending"
         update_data(data)
-        
+        from utility import train_model, save_model , generated_image_store_dir
         
         train_status = None
         save_status = None
@@ -65,12 +64,13 @@ def main():
             data['track_user'][user_id]["save_model"] = "successfull"
             update_data(data)
         
-        if data['track_user'][user_id]["generate_image"] != "successfull":
+        if data['track_user'][user_id]["generate_image"] != "successfull" or True:
             generate_status = generated_image_store_dir(user_id,data['track_user'])
             data['track_user'][user_id]["generate_image"] = "successfull"
             update_data(data)
         
         data['track_user'][user_id]["status"] = "completed"
+        # data['user_id_list'].append(user_id)
         update_data(data)
 
     except Exception as e:
