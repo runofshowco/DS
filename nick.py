@@ -19,6 +19,7 @@ import shutil
 from threading import Thread
 from handle_json import get_data, update_data
 import traceback
+from base64 import encodebytes
 # Folder to store uploaded images
 PROJECT_DIR = "/".join(str(__file__).split('/')[0:-1])
 UPLOAD_FOLDER = f'{PROJECT_DIR}/data/'
