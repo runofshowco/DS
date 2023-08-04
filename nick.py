@@ -105,6 +105,9 @@ def upload_file():
         negetive_prompt = request.form["negetive_prompt"]
         guidance_scale = float(request.form["guidance_scale"])
 
+        if len(image_files) == 0:
+            return {"message": "Image Files Are Required!"}
+
         
 
         user_id = str(uuid.uuid4())
