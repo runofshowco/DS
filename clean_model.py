@@ -11,7 +11,7 @@ data = get_data()
 
 new_user_list = []
 
-for idx in data['track_user'].keys():
+for idx in data['track_user'].keys().copy():
     img_path = os.path.join(UPLOAD_FOLDER, idx, idx)
     l = len(os.listdir(img_path))
 
