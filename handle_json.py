@@ -23,7 +23,8 @@ def get_data():
             data['user_list'] = []
 
         
-        return data
+        return data.copy()
+        
     except Exception as e:
         print(e)
         return {"user_id_list": [], "track_user": {}}
