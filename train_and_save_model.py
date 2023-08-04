@@ -47,7 +47,7 @@ def main():
     try:
         data['track_user'][user_id]["status"] = "pending"
         update_data(data)
-        from utility import train_model, save_model , generated_image_store_dir
+        from utility import train_model, save_model , generated_image_store_dir, clear_model_files
         
         train_status = None
         save_status = None
