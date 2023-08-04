@@ -70,7 +70,7 @@ def main():
 
         if data['track_user'][user_id].get("model_cleared") != "successfull":
             clear_model_files(user_id)
-            data['track_user'][user_id].get["model_cleared"] = "successfull"
+            data['track_user'][user_id]["model_cleared"] = "successfull"
         
         data['track_user'][user_id]["status"] = "completed"
         # data['user_id_list'].append(user_id)
