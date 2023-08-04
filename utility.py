@@ -221,7 +221,7 @@ def generated_image_store_dir(user_id,track_user):
 def clear_model_files(user_id):
     ckpt_path = f"{PROJECT_DIR}/data/{user_id}/stable_diffusion_weights/"
 
-    is_exists = os.isdir(ckpt_path)
+    is_exists = os.path.isdir(ckpt_path)
 
     if is_exists == True:
         shutil.rmtree(ckpt_path)
