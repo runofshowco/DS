@@ -10,15 +10,17 @@ WEIGHTS_DIR ="stable_diffusion_weights"
 data = get_data()
 
 new_user_list = []
-cp_data = data.copy()
-for idx in cp_data['track_user'].keys():
+new_data = {
+    "user_id_list": [],
+    "track_user": {}
+}
+for idx in data['track_user'].keys():
     img_path = os.path.join(UPLOAD_FOLDER, idx, idx)
     l = len(os.listdir(img_path))
 
-    if l == 0:
-        del data['track_user'][idx]
-    else:
-        new_user_list.append(idx)
+    if l!=0:
+        new_data["user_id_list"].append(idx)
+        new_data['track_user'][idx] = data['track_user'][idx]
 
-print(new_user_list)
-print(data)
+
+print(new_data)
