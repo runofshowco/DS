@@ -11,12 +11,12 @@ data = get_data()
 
 new_user_list = []
 
-for idx, x in enumerate(data['track_user']):
+for idx in data['track_user'].keys():
     img_path = os.path.join(UPLOAD_FOLDER, idx, idx)
     l = len(os.listdir(img_path))
 
     if l == 0:
-        del x[idx]
+        del data['track_user'][idx]
     else:
         new_user_list.append(idx)
 
