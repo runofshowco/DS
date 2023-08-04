@@ -11,7 +11,7 @@ data = get_data()
 
 new_user_list = []
 
-for key, x in data['track_user']:
+for key, x in enumerate(data['track_user']):
     img_path = os.path.join(app.config['UPLOAD_FOLDER'], key, key)
     l = len(os.listdir(img_path))
 
