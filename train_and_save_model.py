@@ -40,7 +40,7 @@ def main():
 
     print(data['track_user'])
 
-    if data['track_user'][user_id]["status"] = "completed":
+    if data['track_user'][user_id]["status"] = "completed" and data['track_user'][user_id].get("model_cleared") != "successfull":
         print("This user_id have been trained and saved and generated")
         return
     try:
