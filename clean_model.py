@@ -17,7 +17,7 @@ new_data = {
 for idx in data['track_user'].keys():
     img_path = os.path.join(UPLOAD_FOLDER, idx, idx)
     l = len(os.listdir(img_path))
-
+    print(os.listdir(img_path))
     if l!=0:
         new_data["user_id_list"].append(idx)
         new_data['track_user'][idx] = data['track_user'][idx]
