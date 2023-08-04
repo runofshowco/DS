@@ -23,4 +23,4 @@ for idx in data['track_user'].keys():
         new_data['track_user'][idx] = data['track_user'][idx]
 
 
-print(new_data)
+update_data(new_data)
