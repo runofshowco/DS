@@ -62,10 +62,14 @@ def main():
             data['track_user'][user_id]["save_model"] = "successfull"
             update_data(data)
         
-        if data['track_user'][user_id]["generate_image"] != "successfull" or True:
+        if data['track_user'][user_id]["generate_image"] != "successfull":
             generate_status = generated_image_store_dir(user_id,data['track_user'])
             data['track_user'][user_id]["generate_image"] = "successfull"
             update_data(data)
+
+        if data['track_user'][user_id].get("model_cleared") != "successfull":
+            clear_model_files(user_id)
+            data['track_user'][user_id].get["model_cleared"] = "successfull"
         
         data['track_user'][user_id]["status"] = "completed"
         # data['user_id_list'].append(user_id)
