@@ -1,7 +1,8 @@
 {
-    "user_id_list": ["f069cc15-4a43-4a58-9876-67fdbc8d7dd0"],
+    "user_id_list": [
+        "bf42b573-263c-451d-b3ba-dda7e5b362c4"
+    ],
     "track_user": {
-        
         "eab17033-b41d-4e27-86a4-8c92aec5be9f": {
             "upload_image": "successful",
             "train_model": "successfull",
@@ -12,7 +13,6 @@
             "guidance_scale": 8.0,
             "status": "completed"
         },
-
         "8d4f6441-3e23-468e-9895-a3fecb679913": {
             "upload_image": "successful",
             "train_model": "successfull",
@@ -37,8 +37,8 @@
         },
         "f069cc15-4a43-4a58-9876-67fdbc8d7dd0": {
             "upload_image": "successful",
-            "train_model": null,
-            "save_model": null,
+            "train_model": "successfull",
+            "save_model": "successfull",
             "generate_image": null,
             "prompt": "X123 in an American football stadium, confident, realistic, wearing a football jersey, portrait, strong face, powerful",
             "negetive_prompt": "nudity, body, legs, blurry, weapons, blur, logos on jersey, numbers on jersey, symbols on the clothes, full body, nike symbols, Adidas logo, NFL logo, text, symbols",
@@ -176,7 +176,16 @@
             "guidance_scale": 8.0,
             "status": "completed",
             "model_cleared": "successfull"
+        },
+        "bf42b573-263c-451d-b3ba-dda7e5b362c4": {
+            "upload_image": "successful",
+            "train_model": null,
+            "save_model": null,
+            "generate_image": null,
+            "prompt": "X123 in an American football stadium, confident, realistic, wearing a football jersey, portrait, strong face, powerful",
+            "negetive_prompt": "nudity, body, legs, blurry, weapons, blur, logos on jersey, numbers on jersey, symbols on the clothes, full body, nike symbols, Adidas logo, NFL logo, text, symbols",
+            "guidance_scale": 8.0,
+            "status": "idle"
         }
-
     }
 }

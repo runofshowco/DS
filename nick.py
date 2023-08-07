@@ -228,7 +228,7 @@ def generate_image():
             return jsonify({"message":"Something Wrong. Report to Admin with track_id!", "track_id": user_id})
         
 
-    return jsonify({"message": "Image Being Processed"}), 200
+    return jsonify({"message": "Image Being Processed", "details": {"train_model": track_user[user_id]["train_model"],"save_model": track_user[user_id]["save_model"], "generate_image": track_user[user_id]["generate_image"]}}), 200
 
 
 
