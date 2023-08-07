@@ -38,3 +38,4 @@ torchvision
 transformers
 natsort
 pybase64
+xformers

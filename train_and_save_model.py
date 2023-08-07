@@ -38,7 +38,7 @@ def main():
     
     user_id = data['user_id_list'].pop(0)
 
-    print(data['track_user'])
+    # print(data['track_user'])
 
     if data['track_user'][user_id]["status"] == "completed" and data['track_user'][user_id].get("model_cleared") == "successfull":
         print("This user_id have been trained and saved and generated", user_id)
@@ -56,21 +56,25 @@ def main():
         if data['track_user'][user_id]["train_model"] != "successfull":
             train_status = train_model(user_id)
             data['track_user'][user_id]["train_model"] = "successfull"
+            print("After training-> ", data['track_user'][user_id])
             update_data(data)
         
         if data['track_user'][user_id]["save_model"] != "successfull":
             save_status = save_model(user_id,data['track_user'])
             data['track_user'][user_id]["save_model"] = "successfull"
+            print("After saving-> ", data['track_user'][user_id])
             update_data(data)
         
         if data['track_user'][user_id]["generate_image"] != "successfull":
             generate_status = generated_image_store_dir(user_id,data['track_user'])
             data['track_user'][user_id]["generate_image"] = "successfull"
+            print("After generating-> ", data['track_user'][user_id])
             update_data(data)
 
         if data['track_user'][user_id].get("model_cleared") != "successfull":
             clear_model_files(user_id)
             data['track_user'][user_id]["model_cleared"] = "successfull"
+            update_data(data)
         
         data['track_user'][user_id]["status"] = "completed"
         # data['user_id_list'].append(user_id)
