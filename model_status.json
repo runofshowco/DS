@@ -1,18 +1,7 @@
 {
-    "user_id_list": [
-        "fad5d3ae-de03-43b1-8d8a-fb04e6c2d372"
-    ],
+    "user_id_list": [],
     "track_user": {
-        "fad5d3ae-de03-43b1-8d8a-fb04e6c2d372": {
-            "upload_image": "successful",
-            "train_model": null,
-            "save_model": null,
-            "generate_image": null,
-            "prompt": "X123 in an American football stadium, confident, realistic, wearing a football jersey, portrait, strong face, powerful",
-            "negetive_prompt": "nudity, body, legs, blurry, weapons, blur, logos on jersey, numbers on jersey, symbols on the clothes, full body, nike symbols, Adidas logo, NFL logo, text, symbols",
-            "guidance_scale": 8.0,
-            "status": "idle"
-        },
+        
         "eab17033-b41d-4e27-86a4-8c92aec5be9f": {
             "upload_image": "successful",
             "train_model": "successfull",
