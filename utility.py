@@ -26,6 +26,7 @@ print(WEIGHTS_DIR)
 
 from handle_json import get_data, update_data
 
+training_steps = 600
 
 def train_model(user_id):
 
@@ -35,7 +36,7 @@ def train_model(user_id):
 
     concepts_list = [
     {
-        "instance_prompt":      f"photo of {user_id} person",
+        "instance_prompt":      f"photo of X123 person",
         "class_prompt":         "photo of a person",
         "instance_data_dir":    os.path.join(PROJECT_DIR, 'data', user_id, user_id),
         "class_data_dir":       os.path.join(PROJECT_DIR, 'data', user_id, "person")
@@ -67,8 +68,8 @@ def train_model(user_id):
     --lr_warmup_steps=0 \
     --num_class_images=50 \
     --sample_batch_size=4 \
-    --max_train_steps=1000 \
-    --save_interval=1000 \
+    --max_train_steps={training_steps} \
+    --save_interval={training_steps} \
     --save_sample_prompt="photo of {user_id} person" \
     --concepts_list="{os.path.join(PROJECT_DIR, "data", user_id, "concepts_list.json")}"'''
 
@@ -115,7 +116,7 @@ def save_model(user_id,track_user):
 
 
 
-    ckpt_path = f"{PROJECT_DIR}/data/{user_id}/stable_diffusion_weights/{user_id}/1000" + "/model.ckpt"
+    ckpt_path = f"{PROJECT_DIR}/data/{user_id}/stable_diffusion_weights/{user_id}/{training_steps}" + "/model.ckpt"
 
     half_arg = ""
     fp16 = True
@@ -123,7 +124,7 @@ def save_model(user_id,track_user):
         half_arg = "--half"
 
     cmd = f'''python {PROJECT_DIR}/convert_diffusers_to_original_stable_diffusion.py \
-    --model_path="{PROJECT_DIR}/data/{user_id}/stable_diffusion_weights/{user_id}/1000" \
+    --model_path="{PROJECT_DIR}/data/{user_id}/stable_diffusion_weights/{user_id}/{training_steps}" \
     --checkpoint_path={ckpt_path} {half_arg}
     '''
 
@@ -164,7 +165,7 @@ def save_model(user_id,track_user):
 def generated_image_store_dir(user_id,track_user):
     # generate images using the trained model .ckpt file which is saved in the stable_diffusion_weights folder
     # and save the generated images in the person folder
-    ckpt_path = f"{PROJECT_DIR}/data/{user_id}/stable_diffusion_weights/{user_id}/1000"
+    ckpt_path = f"{PROJECT_DIR}/data/{user_id}/stable_diffusion_weights/{user_id}/{training_steps}"
     data = get_data()
     prompt = data['track_user'][user_id]["prompt"]
     negative_prompt = data['track_user'][user_id]["negetive_prompt"]
@@ -180,7 +181,7 @@ def generated_image_store_dir(user_id,track_user):
     negative_prompt = negative_prompt
     num_samples = 4
     guidance_scale = guidance_scale
-    num_inference_steps = 50
+    num_inference_steps = 75
     height = 512
     width = 768
 
