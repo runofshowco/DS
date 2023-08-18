@@ -104,7 +104,6 @@ def upload_file():
         prompt = request.form["prompt"]
         negetive_prompt = request.form["negetive_prompt"]
         guidance_scale = float(request.form["guidance_scale"])
-        
         seeds = request.form.get('seeds') if request.form.get('seeds') else []
 
         if len(image_files) == 0:
