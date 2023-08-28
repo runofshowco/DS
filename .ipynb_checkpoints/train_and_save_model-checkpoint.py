@@ -18,13 +18,18 @@ def main():
     # first check if the user_id is null or not
 
     data = get_data()
-    
+
+    threshold = 3 
+    total_running = 0
 
     for key,value in data['track_user'].items():
         if value["status"] == "pending":
-            print(f"User {key} is in pending state")
-            return 
+            total_running = total_running + 1
+            
 
+    if total_running >= threshold:
+        print(f'''Already training {threshold} training''')
+        return 
 
     # check if if any user_id is in the model_status.json file
     # Assuming model_status.json is a file path
@@ -38,6 +43,7 @@ def main():
     
     
     user_id = data['user_id_list'].pop(0)
+    update_data(data)
 
     # print(data['track_user'])
 
@@ -58,6 +64,7 @@ def main():
         if data['track_user'][user_id]["train_model"] != "successfull":
             start = time.time()
             train_status = train_model(user_id)
+            data = get_data()
             data['track_user'][user_id]["train_model"] = "successfull"
             print("After training-> ", data['track_user'][user_id])
             data['track_user'][user_id]["training_time"] = time.time() - start
@@ -67,6 +74,7 @@ def main():
         if data['track_user'][user_id]["save_model"] != "successfull":
             start = time.time()
             save_status = save_model(user_id,data['track_user'])
+            data = get_data()
             data['track_user'][user_id]["save_model"] = "successfull"
             print("After saving-> ", data['track_user'][user_id])
             data['track_user'][user_id]["model_saving_time"] = time.time() - start
@@ -75,6 +83,7 @@ def main():
         if data['track_user'][user_id]["generate_image"] != "successfull":
             start = time.time()
             generate_status = generated_image_store_dir(user_id,data['track_user'])
+            data = get_data()
             data['track_user'][user_id]["generate_image"] = "successfull"
             print("After generating-> ", data['track_user'][user_id])
             data['track_user'][user_id]["generating_time"] = time.time() - start
@@ -83,6 +92,7 @@ def main():
         if data['track_user'][user_id].get("model_cleared") != "successfull":
             start = time.time()
             clear_model_files(user_id)
+            data = get_data()
             data['track_user'][user_id]["model_cleared"] = "successfull"
             data['track_user'][user_id]["model_clearing"] = time.time() - start
             update_data(data)

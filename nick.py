@@ -219,7 +219,8 @@ def generate_image():
     if user_id not in track_user.keys():
         return jsonify({"message": "Invalid Track ID!"}), 400
 
-    if ((track_user[user_id]["train_model"] == "successfull") and (track_user[user_id]["save_model"] == "successfull") and (track_user[user_id]["generate_image"] == "successfull") and (track_user[user_id]["upload_image"] == "successful")):
+    # if ((track_user[user_id]["train_model"] == "successfull") and (track_user[user_id]["save_model"] == "successfull") and (track_user[user_id]["generate_image"] == "successfull") and (track_user[user_id]["upload_image"] == "successful")):
+    if(track_user[user_id]['status']== 'completed'):
         try:
             images = []
             for filename in natsorted(glob(f"data/{user_id}/output/*.png")):

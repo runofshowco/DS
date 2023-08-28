@@ -72,7 +72,7 @@ def train_model(user_id):
         "instance_prompt":      f"photo of X123 person",
         "class_prompt":         "photo of a person",
         "instance_data_dir":    os.path.join(PROJECT_DIR, 'data', user_id, user_id, 'cropped'),
-        "class_data_dir":       os.path.join(PROJECT_DIR, 'data', user_id, "person")
+        "class_data_dir":       os.path.join(PROJECT_DIR, 'data', "person")
     }
     ]
 
@@ -103,7 +103,7 @@ def train_model(user_id):
     --learning_rate=1e-6 \
     --lr_scheduler="constant" \
     --lr_warmup_steps=0 \
-    --num_class_images=50 \
+    --num_class_images=69 \
     --sample_batch_size=4 \
     --max_train_steps={training_steps} \
     --save_interval={training_steps} \
