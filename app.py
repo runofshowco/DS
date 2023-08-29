@@ -28,8 +28,10 @@ OUTPUT_DIR = "stable_diffusion_weights"
 WEIGHTS_DIR = "stable_diffusion_weights"
 track_user = {}
 user_id_list = []
-app = Flask(__name__)
+# app = Flask(__name__)
 
+from init import app, db
+from task_queue import Task_Queue as tq
 
 
 CORS(app) # Adds CORS to all routes
@@ -149,20 +151,27 @@ def upload_file():
 
         # append the user_id in the model_status.json file
 
-        data = get_data()
+        # data = get_data()
         
-        data["user_id_list"].append(user_id)
+        # data["user_id_list"].append(user_id)
 
-        data['track_user'][user_id] = {"upload_image":"successful","train_model":None,"save_model":None,"generate_image":None,"prompt":prompt,"negetive_prompt":negetive_prompt,"guidance_scale":guidance_scale, "seeds": seeds, "status":"idle"}    
+        # data['track_user'][user_id] = {"upload_image":"successful","train_model":None,"save_model":None,"generate_image":None,"prompt":prompt,"negetive_prompt":negetive_prompt,"guidance_scale":guidance_scale, "seeds": seeds, "status":"idle"}    
 
 
 
         # dump the data in the model_status.json file
-        update_data(data)
+        # update_data(data)
 
-
-
-            
+        new_data = tq(id=user_id,
+        upload_image=1,
+        prompt=prompt,
+        negative_prompt=negetive_prompt,
+        guidance_scale=guidance_scale,
+        seeds= seeds,
+        status='idle'
+        )
+        db.session.add(new_data)
+        db.session.commit()
         
         # Add user_id to track_user such that the "upload_image":"successfull" is added to the user_id
         # put all the values 'null' in the track_user[user_id] except the "upload_image":"successfull"
@@ -212,26 +221,28 @@ def encode_image(image_path):
 @app.route('/get_images', methods=['POST','GET'])
 def generate_image():
     global MODEL_NAME,OUTPUT_DIR,WEIGHTS_DIR
-    track_user = get_data()["track_user"]
+    # track_user = get_data()["track_user"]
 
     user_id = request.form["track_id"]
 
-    if user_id not in track_user.keys():
-        return jsonify({"message": "Invalid Track ID!"}), 400
+    track_user = tq.get_single(user_id)
+
+    # if user_id not in track_user.keys():
+    #     return jsonify({"message": "Invalid Track ID!"}), 400
 
     # if ((track_user[user_id]["train_model"] == "successfull") and (track_user[user_id]["save_model"] == "successfull") and (track_user[user_id]["generate_image"] == "successfull") and (track_user[user_id]["upload_image"] == "successful")):
-    if(track_user[user_id]['status']== 'completed'):
+    if(track_user['status']== 'completed'):
         try:
             images = []
             for filename in natsorted(glob(f"data/{user_id}/output/*.png")):
                 images.append(encode_image(filename))
-            return jsonify({"message":"Generation Successfull!", "images": images})
+            return jsonify({"message":"Generation Successfull!", "images": images, "details": track_user})
         except Exception as e:
             print(e)
             return jsonify({"message":"Something Wrong. Report to Admin with track_id!", "track_id": user_id})
         
 
-    return jsonify({"message": "Image Being Processed", "details": {"train_model": track_user[user_id]["train_model"],"save_model": track_user[user_id]["save_model"], "generate_image": track_user[user_id]["generate_image"]}}), 200
+    return jsonify({"message": "Image Being Processed", "details": track_user}), 200
 
 
 

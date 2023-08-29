@@ -3,6 +3,8 @@ import json
 import traceback
 from handle_json import get_data, update_data
 import time
+from task_queue import Task_Queue as tq
+from init import app, db
 
 # Get the absolute path of the directory the script is located in
 abs_dir_path = os.path.dirname(os.path.abspath('/workspace/nickfarrell'))
@@ -17,101 +19,71 @@ def main():
     # pop the first element from the list and train and save and generate
     # first check if the user_id is null or not
 
-    data = get_data()
+    with app.app_context():
+        data = tq.get_by(status='idle')
+        print(data)
 
-    threshold = 3 
-    total_running = 0
+        if len(data) == 0:
+            print("No task in queue")
+            return
 
-    for key,value in data['track_user'].items():
-        if value["status"] == "pending":
-            total_running = total_running + 1
+        threshold = 2 
+        total_running = 0
+
+        pending = tq.get_by(status='pending')
+
+        if len(pending) >= threshold:
+            print(f'''Already training {threshold} training''')
+            return 
+
+        
+
+        data = data[0]
+        print(data['id'])
+
+        tq.update(data['id'], status='pending')
+
+
+        try:
+            strating_time= time.time()
+            tq.update(data['id'], status='pending', start= time.time()) 
+            from utility import train_model, save_model , generated_image_store_dir, clear_model_files
+            train_status = None
+            save_status = None
+            generate_status = None
+
+            if not data['train_model']:
+                start = time.time()
+                train_status = train_model(data['id'])
+                tq.update(data['id'], train_model= 1)
+                tq.update(data['id'], training_time = time.time() - start)
             
+            
+            if not data['save_model']:
+                start = time.time()
+                save_status = save_model(data['id'])
+                tq.update(data['id'], save_model= 1)
+                tq.update(data['id'], model_saving_time = time.time() - start)
+            
+            if not data['generate_image']:
+                start = time.time()
+                generate_status = generated_image_store_dir(data['id'])
+                tq.update(data['id'], generate_image= 1)
+                tq.update(data['id'], generating_time = time.time() - start)
 
-    if total_running >= threshold:
-        print(f'''Already training {threshold} training''')
-        return 
-
-    # check if if any user_id is in the model_status.json file
-    # Assuming model_status.json is a file path
-    
-    # check if the user_id_list is empty or not
-    if len(data['user_id_list']) == 0:
-        print("User id list is empty")
-        return
-
-
-    
-    
-    user_id = data['user_id_list'].pop(0)
-    update_data(data)
-
-    # print(data['track_user'])
-
-    if data['track_user'][user_id]["status"] == "completed" and data['track_user'][user_id].get("model_cleared") == "successfull":
-        print("This user_id have been trained and saved and generated", user_id)
-        update_data(data)
-        return
-    try:
-        data['track_user'][user_id]["status"] = "pending"
-        data['track_user'][user_id]["start"] = time.time()
-        update_data(data)
-        from utility import train_model, save_model , generated_image_store_dir, clear_model_files
-        
-        train_status = None
-        save_status = None
-        generate_status = None
-
-        if data['track_user'][user_id]["train_model"] != "successfull":
-            start = time.time()
-            train_status = train_model(user_id)
-            data = get_data()
-            data['track_user'][user_id]["train_model"] = "successfull"
-            print("After training-> ", data['track_user'][user_id])
-            data['track_user'][user_id]["training_time"] = time.time() - start
-            update_data(data)
-        
-        
-        if data['track_user'][user_id]["save_model"] != "successfull":
-            start = time.time()
-            save_status = save_model(user_id,data['track_user'])
-            data = get_data()
-            data['track_user'][user_id]["save_model"] = "successfull"
-            print("After saving-> ", data['track_user'][user_id])
-            data['track_user'][user_id]["model_saving_time"] = time.time() - start
-            update_data(data)
-        
-        if data['track_user'][user_id]["generate_image"] != "successfull":
-            start = time.time()
-            generate_status = generated_image_store_dir(user_id,data['track_user'])
-            data = get_data()
-            data['track_user'][user_id]["generate_image"] = "successfull"
-            print("After generating-> ", data['track_user'][user_id])
-            data['track_user'][user_id]["generating_time"] = time.time() - start
-            update_data(data)
-
-        if data['track_user'][user_id].get("model_cleared") != "successfull":
-            start = time.time()
-            clear_model_files(user_id)
-            data = get_data()
-            data['track_user'][user_id]["model_cleared"] = "successfull"
-            data['track_user'][user_id]["model_clearing"] = time.time() - start
-            update_data(data)
-        
-        data['track_user'][user_id]["status"] = "completed"
-        data['track_user'][user_id]["end"] = time.time()
-        data['track_user'][user_id]["processing_time"] = data['track_user'][user_id]["end"] - data['track_user'][user_id]["start"]
-        # data['user_id_list'].append(user_id)
-        update_data(data)
-
-    except Exception as e:
-        print('--->', e)
-        traceback.print_exc()
-        data['user_id_list'].append(user_id)
-        data['track_user'][user_id]["status"] = "idle"
-        update_data(data)
+            if not data['model_cleared']:
+                
+                clear_model_files(data['id'])
+                tq.update(data['id'], model_cleared= 1)
+            
+            tq.update(data['id'], status= 'completed', export='ready', end=time.time(), processing_time= time.time() - strating_time)
         
 
-
+        except Exception as e:
+            print('--->', e)
+            traceback.print_exc()
+            tq.update(data['id'], status= 'idle')
+        
 
 
 

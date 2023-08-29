@@ -10,7 +10,7 @@ from PIL import Image
 from natsort import natsorted
 from glob import glob
 import shlex
-
+from flask import jsonify
 import io
 import subprocess
 import shutil
@@ -18,6 +18,14 @@ from threading import Thread
 import time
 
 import random
+
+import requests
+from base64 import encodebytes
+
+from task_queue import Task_Queue as tq
+from init import app, db
+
+
 
 PROJECT_DIR = "/".join(str(__file__).split('/')[0:-1])
 UPLOAD_FOLDER = 'data/'
@@ -145,7 +153,7 @@ def train_model(user_id):
         return "Model trained successfully"
     
 
-def save_model(user_id,track_user):
+def save_model(user_id):
 
     # Remove existing files
     #remove_files_in_directory(app.config['OUTPUT_DIR'])
@@ -199,15 +207,15 @@ def save_model(user_id,track_user):
 
 
 
-def generated_image_store_dir(user_id,track_user):
+def generated_image_store_dir(user_id):
     # generate images using the trained model .ckpt file which is saved in the stable_diffusion_weights folder
     # and save the generated images in the person folder
     ckpt_path = f"{PROJECT_DIR}/data/{user_id}/stable_diffusion_weights/{user_id}/{training_steps}"
-    data = get_data()
-    prompt = data['track_user'][user_id]["prompt"]
-    negative_prompt = data['track_user'][user_id]["negetive_prompt"]
-    guidance_scale = data['track_user'][user_id]["guidance_scale"]
-    seeds = data['track_user'][user_id]["seeds"]
+    data = tq.get_one_by(id=user_id)
+    prompt = data["prompt"]
+    negative_prompt = data["negative_prompt"]
+    guidance_scale = data["guidance_scale"]
+    seeds = json.loads(data.get("seeds") if data.get("seeds") else "[]" )
     pipe = StableDiffusionPipeline.from_pretrained(ckpt_path, safety_checker=None, torch_dtype=torch.float16).to("cuda")
     pipe.scheduler = DDPMScheduler.from_config(pipe.scheduler.config)
     pipe.enable_xformers_memory_efficient_attention()
@@ -273,6 +281,28 @@ def clear_model_files(user_id):
 
     if is_exists == True:
         shutil.rmtree(ckpt_path)
+    
+    return True
+
+def encode_image(image_path):
+    pil_img = Image.open(image_path, mode='r') # reads the PIL image
+    byte_arr = io.BytesIO()
+    pil_img.save(byte_arr, format='PNG') # convert the PIL image to byte array
+    encoded_img = encodebytes(byte_arr.getvalue()).decode('ascii') # encode as base64
+    return encoded_img
+
+def send_image(track_id):
+    images = []
+    for filename in natsorted(glob(f"data/{track_id}/output/*.png")):
+        images.append(encode_image(filename))
+    
+    data = {"message":"Generation Successfull!", "images": images, "track_id": track_id}
+    headers = {'x-project': "bmlja2ZhcnJlbGw6ZzFuOHY4emkyNGxxemV0ZndxdmZ6Y2J3bTg4emFsaw=="}
+
+    url = 'https://mkdlabs.com/v3/api/lambda/nickfarrell/webhook'
+    r = requests.post(url, json= data, headers=headers)
+
+    print(r.__dict__['_content'])
     
     return True
 
