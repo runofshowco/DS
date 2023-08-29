@@ -299,6 +299,8 @@ def send_image(track_id):
     data = {"message":"Generation Successfull!", "images": images, "track_id": track_id}
     headers = {'x-project': "bmlja2ZhcnJlbGw6ZzFuOHY4emkyNGxxemV0ZndxdmZ6Y2J3bTg4emFsaw=="}
 
+    # print(data)
+
     url = 'https://mkdlabs.com/v3/api/lambda/nickfarrell/webhook'
     r = requests.post(url, json= data, headers=headers)
 
