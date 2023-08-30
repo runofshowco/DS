@@ -2,4 +2,4 @@ model_status.json
 venv/
 data/
 instance/
-__pycache__/
+__pycache__
