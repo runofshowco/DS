@@ -17,6 +17,7 @@ class Task_Queue(db.Model):
     generating_time = db.Column(db.Numeric(20,4), nullable=True)
     end = db.Column(db.Numeric(20,4), nullable=True)
     processing_time = db.Column(db.Numeric(20,4), nullable=True)
+    arrival_time = db.Column(db.Numeric(20,4), nullable=True)
     export = db.Column(db.String, nullable=True)
     seeds = db.Column(db.String, nullable=True)
     @property
@@ -40,6 +41,8 @@ class Task_Queue(db.Model):
             "generating_time": self.generating_time,
             "end": self.end,
             "processing_time": self.processing_time,
+            "arrival_time": self.arrival_time,
+            "seeds": self.seeds,
             "export": self.export
        }
 
@@ -50,7 +53,7 @@ class Task_Queue(db.Model):
     @classmethod
     def get_by(cls, **kwargs):
         try:
-            return [x.serialize for x in db.session.execute(db.select(Task_Queue).filter_by(**kwargs)).scalars().all()]
+            return [x.serialize for x in db.session.execute(db.select(Task_Queue).filter_by(**kwargs).order_by(Task_Queue.arrival_time)).scalars().all()]
         except Exception as e:
             print(e)
             return []
@@ -58,7 +61,7 @@ class Task_Queue(db.Model):
     @classmethod
     def get_one_by(cls, **kwargs):
         try:
-            return db.session.execute(db.select(Task_Queue).filter_by(**kwargs)).scalars().first().serialize
+            return db.session.execute(db.select(Task_Queue).filter_by(**kwargs).order_by(Task_Queue.arrival_time)).scalars().first().serialize
         except:
             return None
 

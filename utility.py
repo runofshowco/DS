@@ -293,7 +293,7 @@ def encode_image(image_path):
 
 def send_image(track_id):
     images = []
-    for filename in natsorted(glob(f"data/{track_id}/output/*.png")):
+    for filename in natsorted(glob(f"{PROJECT_DIR}/data/{track_id}/output/*.png")):
         images.append(encode_image(filename))
     
     data = {"message":"Generation Successfull!", "images": images, "track_id": track_id}
