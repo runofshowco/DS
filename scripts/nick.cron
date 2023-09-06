@@ -1,0 +1,2 @@
+* * * * * bash /workspace/nickfarrell/run_nick_model_train.sh >> /workspace/queue.nick
+* * * * * bash /workspace/nickfarrell/export_image.sh >> /workspace/export_queue.nick
