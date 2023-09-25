@@ -1,4 +1,4 @@
 echo 'Starting...'
-cd /workspace/nickfarrell
-source /workspace/nickfarrell/venv/bin/activate
-python /workspace/nickfarrell/train_and_save_model.py
+cd /workspace/ds_nickfarrell
+source /workspace/ds_nickfarrell/venv/bin/activate
+python /workspace/ds_nickfarrell/train_and_save_model.py
