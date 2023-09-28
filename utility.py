@@ -37,7 +37,7 @@ print(WEIGHTS_DIR)
 
 from handle_json import get_data, update_data
 
-training_steps = 800
+training_steps = 1201
 
 import os
 import re
@@ -95,49 +95,78 @@ def train_model(user_id):
 
     output_dir = os.path.join(PROJECT_DIR, "data", user_id, "stable_diffusion_weights", user_id)
     
-    cmd = f'''python3 {PROJECT_DIR}/train_dreambooth.py \
-    --pretrained_model_name_or_path={MODEL_NAME} \
-    --pretrained_vae_name_or_path="stabilityai/sd-vae-ft-mse" \
-    --output_dir="{output_dir}" \
-    --with_prior_preservation --prior_loss_weight=1.0 \
-    --seed=1337 \
-    --resolution=512 \
-    --train_batch_size=1 \
-    --train_text_encoder \
-    --mixed_precision="fp16" \
-    --use_8bit_adam \
-    --gradient_accumulation_steps=1 \
-    --learning_rate=1e-6 \
-    --lr_scheduler="constant" \
-    --lr_warmup_steps=0 \
-    --num_class_images=69 \
-    --sample_batch_size=4 \
-    --max_train_steps={training_steps} \
-    --save_interval={training_steps} \
-    --save_sample_prompt="photo of {user_id} person" \
-    --concepts_list="{os.path.join(PROJECT_DIR, "data", user_id, "concepts_list.json")}"'''
+    # cmd = f'''python3 {PROJECT_DIR}/train_dreambooth.py \
+    # --pretrained_model_name_or_path={MODEL_NAME} \
+    # --pretrained_vae_name_or_path="stabilityai/sd-vae-ft-mse" \
+    # --output_dir="{output_dir}" \
+    # --with_prior_preservation --prior_loss_weight=1.0 \
+    # --seed=1337 \
+    # --resolution=512 \
+    # --train_batch_size=1 \
+    # --train_text_encoder \
+    # --mixed_precision="fp16" \
+    # --use_8bit_adam \
+    # --gradient_accumulation_steps=1 \
+    # --learning_rate=1e-6 \
+    # --lr_scheduler="constant" \
+    # --lr_warmup_steps=30 \
+    # --num_class_images=69 \
+    # --sample_batch_size=4 \
+    # --max_train_steps={training_steps} \
+    # --save_interval={training_steps} \
+    # --save_sample_prompt="photo of X123 person" \
+    # --concepts_list="{os.path.join(PROJECT_DIR, "data", user_id, "concepts_list.json")}"'''
+
+    cmd= f'''python3 {PROJECT_DIR}/train_dreambooth.py \
+  --pretrained_model_name_or_path={MODEL_NAME} \
+  --pretrained_vae_name_or_path="stabilityai/sd-vae-ft-mse" \
+  --output_dir={output_dir} \
+  --with_prior_preservation --prior_loss_weight=1.0 \
+  --seed=1337 \
+  --resolution=512 \
+  --train_batch_size=1 \
+  --train_text_encoder \
+  --mixed_precision="fp16" \
+  --use_8bit_adam \
+  --gradient_accumulation_steps=1 \
+  --learning_rate=1e-6 \
+  --lr_scheduler="constant" \
+  --lr_warmup_steps=30 \
+  --num_class_images=69 \
+  --sample_batch_size=4 \
+  --max_train_steps={training_steps} \
+  --save_interval={training_steps} \
+  --save_sample_prompt="photo of X123 person" \
+  --concepts_list="{os.path.join(PROJECT_DIR, "data", user_id, "concepts_list.json")}"'''
+
+    
 
     # Training script here, for example:
     print("Training model...")
 
+    # try:
+    #     result = subprocess.run(cmd, check=True, shell=True, text=True, capture_output=True)
+    #     print(result.stdout)
+    # except subprocess.CalledProcessError as e:
+    #     print(f'Error occurred: {e}')
 
     args = shlex.split(cmd)
     process = subprocess.Popen(args, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-
+    
     stdout, stderr = process.communicate()
 
     print(cmd)
     print(stdout, stderr)
 
-    # try:
-    #     process = subprocess.run(cmd, shell=True, check=True, text=True, capture_output=True)
-    # except subprocess.CalledProcessError as e:
-    #     print(f"Command '{e.cmd}' returned non-zero exit status {e.returncode}.")
-    #     print("STDOUT:")
-    #     print(e.stdout)
-    #     print("STDERR:")
-    #     print(e.stderr)
-    #     return "Model not trained successfully"
+    # # try:
+    # #     process = subprocess.run(cmd, shell=True, check=True, text=True, capture_output=True)
+    # # except subprocess.CalledProcessError as e:
+    # #     print(f"Command '{e.cmd}' returned non-zero exit status {e.returncode}.")
+    # #     print("STDOUT:")
+    # #     print(e.stdout)
+    # #     print("STDERR:")
+    # #     print(e.stderr)
+    # #     return "Model not trained successfully"
 
     if process.returncode != 0:
         #write_to_txt_file("model_saving_status.txt", "Model not trained successfully")
@@ -235,8 +264,8 @@ def generated_image_store_dir(user_id):
         prompt = prompt
         negative_prompt = negative_prompt
         num_samples = 1
-        guidance_scale = guidance_scale
-        num_inference_steps = 100
+        guidance_scale = float(guidance_scale)
+        num_inference_steps = 50
         height = 512
         width = 512
     

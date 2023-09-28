@@ -299,7 +299,7 @@ class DreamBoothDataset(Dataset):
 
         self.instance_images_path = []
         self.class_images_path = []
-
+        # print(concepts_list)
         for concept in concepts_list:
             inst_img_path = [
                 (x, concept["instance_prompt"])
@@ -420,6 +420,7 @@ def get_full_repo_name(model_id: str, organization: Optional[str] = None, token:
 
 
 def main(args):
+    print(args)
     logging_dir = Path(args.output_dir, "0", args.logging_dir)
 
     accelerator = Accelerator(
@@ -447,6 +448,7 @@ def main(args):
     if args.seed is not None:
         set_seed(args.seed)
 
+    
     if args.concepts_list is None:
         args.concepts_list = [
             {
@@ -459,6 +461,8 @@ def main(args):
     else:
         with open(args.concepts_list, "r") as f:
             args.concepts_list = json.load(f)
+
+    
 
     if args.with_prior_preservation:
         pipeline = None

@@ -1,0 +1,8 @@
+[
+    {
+        "instance_prompt": "photo of X123 person",
+        "class_prompt": "photo of a person",
+        "instance_data_dir": "/workspace/ds_nickfarrell/data/a9e1bcf2-ae89-40db-bac3-f0ee248c1dda/a9e1bcf2-ae89-40db-bac3-f0ee248c1dda/cropped",
+        "class_data_dir": "/workspace/ds_nickfarrell/data/person/"
+    }
+]
