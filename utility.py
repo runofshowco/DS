@@ -133,7 +133,7 @@ def train_model(user_id):
   --lr_scheduler="constant" \
   --lr_warmup_steps=30 \
   --num_class_images=69 \
-  --sample_batch_size=4 \
+  --sample_batch_size=3 \
   --max_train_steps={training_steps} \
   --save_interval={training_steps} \
   --save_sample_prompt="photo of X123 person" \
