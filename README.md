@@ -1,3 +1,8 @@
-# nickfarrell
+# Welcome to Readme
 
-This is the repo for nick farrell
+Backend
+* flask
+* app.py
+* run on runpod.io
+* endpoints: /upload, /get_image
+* use scripts/setup to start app server
