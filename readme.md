@@ -23,11 +23,11 @@ sudo -s
 bash scripts/init.sh
 ```
 
-This script initializes the project environment. This command is only for the first time.
+This script initializes the project environment and start the server. This command is only for the first time.
 
 ## 4. Run setup.sh (Optional)
 
-Run the `setup.sh` script to run the server and cronjob. It's included in init.sh as well, so, if you run init.sh, no need to run it. However, when you restart the server or your computer, you should run this script. Ensure you're in the project base directory and execute:
+Run the `setup.sh` script to run the server and cronjob. It's included in `init.sh` as well, so, if you run `init.sh`, no need to run it. However, when you restart the server or your computer, you should run this script. Ensure you're in the project base directory and execute:
 
 ```bash
 sudo -s
