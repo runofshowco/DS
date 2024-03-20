@@ -41,4 +41,5 @@ xformers
 triton==2.0.0
 gunicorn
 flask_sqlalchemy
+flask_migrate
 
