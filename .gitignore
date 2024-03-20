@@ -4,3 +4,4 @@ data/
 instance/
 __pycache__
 person.zip
+migrations/
