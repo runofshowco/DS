@@ -329,7 +329,7 @@ def send_image(track_id):
 
     # print(data)
 
-    url = 'https://mkdlabs.com/v3/api/lambda/nickfarrell/webhook'
+    url = 'https://api.aieventbooth.com/v3/api/lambda/nickfarrell/webhook'
     r = requests.post(url, json= data, headers=headers)
 
     print(r.__dict__['_content'])
