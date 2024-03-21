@@ -9,6 +9,8 @@ from init import app, db
 # Get the absolute path of the directory the script is located in
 abs_dir_path = os.path.dirname('/workspace/ds_nickfarrell/')
 
+
+
 # Change the working directory to the directory the script is in
 os.chdir(abs_dir_path)
 
