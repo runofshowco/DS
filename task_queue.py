@@ -72,4 +72,18 @@ class Task_Queue(db.Model):
         for key, value in kwargs.copy().items():
             x.__setattr__(key, value) 
         db.session.commit()
+
+    @classmethod
+    def delete_by_id(cls, id):
+        try:
+            record = db.session.query(Task_Queue).filter_by(id=id).first()
+            if record:
+                db.session.delete(record)
+                db.session.commit()
+                return True
+            else:
+                return False
+        except Exception as e:
+            print(e)
+            return False
     
